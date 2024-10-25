@@ -94,6 +94,7 @@ test:
 production:
   primary: &primary_production
     <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
     database: rails_8_api_production
     username: rails_8_api
     password: <%= ENV["RAILS_8_API_DATABASE_PASSWORD"] %>
