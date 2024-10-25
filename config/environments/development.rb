@@ -22,7 +22,7 @@ Rails.application.configure do
       "cache-control" => "public, max-age=#{2.days.to_i}"
     }
   else
-    config.action_controller.perform_caching = false
+    config.action_controller.perform_caching = true
   end
 
   # Change to :null_store to avoid any caching.
@@ -72,7 +72,6 @@ Rails.application.configure do
 
   # Replace the default in-process memory cache store with a durable alternative.
   config.cache_store = :solid_cache_store
-  # config.cache_store = :memory_store
 
   # Replace the default in-process and non-durable queuing backend for Active Job.
   config.active_job.queue_adapter = :solid_queue

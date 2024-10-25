@@ -3,13 +3,17 @@ class Api::V1::PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = Post.all
-
+    @posts = Rails.cache.fetch("all_posts", expires_in: 12.hours) do
+      Post.all.to_a
+    end
     render json: @posts
   end
 
   # GET /posts/1
   def show
+    @post = Rails.cache.fetch("post_#{params[:id]}", expires_in: 12.hours) do
+    Post.find(params[:id])
+    end
     render json: @post
   end
 
@@ -18,6 +22,7 @@ class Api::V1::PostsController < ApplicationController
     @post = Post.new(post_params)
 
     if @post.save
+      Rails.cache.delete("all_posts")
       render json: @post, status: :created, location: @post
     else
       render json: @post.errors, status: :unprocessable_entity
@@ -27,6 +32,8 @@ class Api::V1::PostsController < ApplicationController
   # PATCH/PUT /posts/1
   def update
     if @post.update(post_params)
+      Rails.cache.delete("all_posts")
+      Rails.cache.delete("post_#{params[:id]}")
       render json: @post
     else
       render json: @post.errors, status: :unprocessable_entity
@@ -36,6 +43,8 @@ class Api::V1::PostsController < ApplicationController
   # DELETE /posts/1
   def destroy
     @post.destroy!
+    Rails.cache.delete("all_posts")
+    Rails.cache.delete("post_#{params[:id]}")
   end
 
   private
