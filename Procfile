@@ -1,1 +1,1 @@
-web: bin/rails db:migrate && bin/rails s
+web: bin/rails s
