@@ -10,13 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_10_24_141843) do
+ActiveRecord::Schema[8.0].define(version: 2024_10_28_041221) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "moving_services", force: :cascade do |t|
+    t.string "name"
+    t.boolean "enabled", default: true
+    t.integer "miles_setting"
+    t.integer "index"
+    t.boolean "is_default", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "posts", force: :cascade do |t|
     t.string "title"
     t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "password_digest"
+    t.string "email"
+    t.string "phone"
+    t.integer "role", default: 5
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
