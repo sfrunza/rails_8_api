@@ -52,7 +52,9 @@ export default function CalendarRatesList() {
     }
 
     try {
-      const response = await api.patch(`/calendar_rates/${id}`, newData);
+      const response = await api.patch(`/calendar_rates/${id}`, {
+        calendar_rate: newData,
+      });
 
       const data = response.data;
       if (data) {

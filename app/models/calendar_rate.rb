@@ -1,5 +1,5 @@
 class CalendarRate < ApplicationRecord
-  belongs_to :rate
+  belongs_to :rate, optional: true
 
   def self.create_full_year
     default_rate = Rate.first

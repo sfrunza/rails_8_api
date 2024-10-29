@@ -98,7 +98,7 @@ export default function RatesPage() {
             </div>
           )}
           {dbRates && (
-            <Table>
+            <Table className="min-w-[770px]">
               <TableHeader>
                 <TableRow className="hover:bg-background">
                   <TableHead className="w-48">Name</TableHead>
