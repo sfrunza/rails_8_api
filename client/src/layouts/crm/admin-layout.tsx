@@ -30,6 +30,7 @@ import {
   SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import { logout } from '@/slices/auth-slice';
 import { useAppDispatch, useAppSelector } from '@/store';
@@ -76,7 +77,7 @@ const navData = {
 };
 
 export default function AdminLayout() {
-  const { pathname } = useLocation();
+  // const { pathname } = useLocation();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
   if (!user) {
@@ -84,7 +85,8 @@ export default function AdminLayout() {
   }
   return (
     <SidebarProvider>
-      <Sidebar variant="inset">
+      <AppSidebar />
+      {/* <Sidebar variant="inset">
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
@@ -109,6 +111,7 @@ export default function AdminLayout() {
           <SidebarGroup>
             <SidebarMenu>
               {navData.navMain.map((item, i) => {
+                // const { setOpen } = useSidebar();
                 const active = item.url === pathname;
                 return (
                   <SidebarMenuItem key={i}>
@@ -116,6 +119,9 @@ export default function AdminLayout() {
                       asChild
                       tooltip={item.title}
                       variant={active ? 'outline' : 'default'}
+                      onClick={() => {
+                        // setOpen(false);
+                      }}
                     >
                       <Link to={item.url}>
                         <item.icon />
@@ -128,7 +134,7 @@ export default function AdminLayout() {
             </SidebarMenu>
           </SidebarGroup>
         </SidebarContent>
-      </Sidebar>
+      </Sidebar> */}
       <SidebarInset className="overflow-hidden">
         <header className="flex h-16 shrink-0 items-center gap-2 border-b">
           <div className="flex items-center justify-between px-4 w-full">
@@ -187,5 +193,62 @@ export default function AdminLayout() {
         </div>
       </SidebarInset>
     </SidebarProvider>
+  );
+}
+
+function AppSidebar() {
+  const { pathname } = useLocation();
+  const { setOpenMobile } = useSidebar();
+
+  return (
+    <Sidebar variant="inset">
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg" asChild>
+              <Link to="/">
+                <img
+                  src={logoLight}
+                  alt="Light theme image"
+                  className="block dark:hidden max-w-32"
+                />
+                <img
+                  src={logoDark}
+                  alt="Dark theme image"
+                  className="hidden dark:block max-w-32"
+                />
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarMenu>
+            {navData.navMain.map((item, i) => {
+              // const { setOpen } = useSidebar();
+              const active = item.url === pathname;
+              return (
+                <SidebarMenuItem key={i}>
+                  <SidebarMenuButton
+                    asChild
+                    tooltip={item.title}
+                    variant={active ? 'outline' : 'default'}
+                    onClick={() => {
+                      setOpenMobile(false);
+                    }}
+                  >
+                    <Link to={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              );
+            })}
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
   );
 }

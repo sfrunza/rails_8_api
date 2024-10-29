@@ -16,6 +16,8 @@ import SettingsPage from '@/pages/crm/settings/settings-page';
 import { RequestsPage } from '@/pages/crm/requests/requests-page';
 import ServicesPage from '@/pages/crm/settings/services/services-page';
 import PrivateRoute from '@/components/private-route';
+import RatesPage from './pages/crm/settings/rates/rates-page';
+import CalendarRatesPage from './pages/crm/settings/calendar-rates/calendar-rates-page';
 
 type ResponseData = {
   error?: string;
@@ -109,11 +111,11 @@ const router = createBrowserRouter([
           },
           {
             path: 'rates',
-            element: <div>rates</div>,
+            element: <RatesPage />,
           },
           {
             path: 'calendar-rates',
-            element: <div>calendar-rates</div>,
+            element: <CalendarRatesPage />,
           },
         ],
       },

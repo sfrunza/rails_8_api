@@ -92,4 +92,10 @@ MovingService.create!(
   is_default: true
 )
 
+Rate.create(name: "Discount", color: "#000000", enable: true)
+Rate.create(name: "Regular", color: "#000000", enable: true)
+Rate.create(name: "Subpeak", color: "#000000", enable: true)
+Rate.create(name: "Peak", color: "#000000", enable: true)
+Rate.create(name: "High Peak", color: "#000000", enable: true)
+
 puts "Seeding complete!"

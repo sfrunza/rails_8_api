@@ -3,6 +3,7 @@ import useSWR, { useSWRConfig } from "swr";
 
 import { api } from "@/api";
 import { TMovingService } from "@/types/moving-services";
+import toast from "react-hot-toast";
 
 
 
@@ -13,7 +14,15 @@ interface TOptions {
 
 export default function useMovingServices() {
   const { mutate } = useSWRConfig()
-  const { data: movingServices, error, isLoading } = useSWR<TMovingService[]>('/moving_services');
+  const { data: movingServices, error, isLoading } = useSWR<TMovingService[]>('/moving_services', null, {
+    onError: () => {
+      if (!navigator.onLine) {
+        toast.error(
+          "You are offline. Please check your internet connection.",
+        );
+      }
+    },
+  });
   // const [isAdding, setIsAdding] = useState<boolean>(false);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 

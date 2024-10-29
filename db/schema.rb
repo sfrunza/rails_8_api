@@ -10,9 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_10_28_041221) do
+ActiveRecord::Schema[8.0].define(version: 2024_10_29_005210) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "calendar_rates", force: :cascade do |t|
+    t.date "date"
+    t.boolean "enable_automation"
+    t.boolean "enable_auto_booking"
+    t.boolean "is_blocked"
+    t.bigint "rate_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["date"], name: "index_calendar_rates_on_date"
+    t.index ["rate_id"], name: "index_calendar_rates_on_rate_id"
+  end
 
   create_table "moving_services", force: :cascade do |t|
     t.string "name"
@@ -31,6 +43,17 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_28_041221) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "rates", force: :cascade do |t|
+    t.integer "extra_mover_rate"
+    t.integer "extra_truck_rate"
+    t.boolean "enable"
+    t.string "name"
+    t.string "color"
+    t.jsonb "movers_rates", default: {"2"=>{"hourly_rate"=>10000}, "3"=>{"hourly_rate"=>10000}, "4"=>{"hourly_rate"=>10000}, "5"=>{"hourly_rate"=>10000}, "6"=>{"hourly_rate"=>10000}, "7"=>{"hourly_rate"=>10000}, "8"=>{"hourly_rate"=>10000}, "9"=>{"hourly_rate"=>10000}, "10"=>{"hourly_rate"=>10000}}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -41,4 +64,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_10_28_041221) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_foreign_key "calendar_rates", "rates"
 end
