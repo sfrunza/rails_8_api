@@ -4,9 +4,11 @@ class Api::V1::RatesController < ApplicationController
 
   # GET /rates
   def index
-    @rates = Rate.all.order(:id)
+    rates = Rate.all.order(:id)
+    serialized_data = RateSerializer.new(rates).serializable_hash[:data]
+    response_data = serialized_data.map { |rate| rate[:attributes] }
 
-    render json: @rates
+    render json: response_data
   end
 
   # GET /rates/1

@@ -4,7 +4,7 @@ class Api::V1::CalendarRatesController < ApplicationController
 
   # GET /calendar_rates
   def index
-    @calendar_rates =
+    calendar_rates =
       CalendarRate
         .includes(:rate)
         .where(
@@ -12,14 +12,16 @@ class Api::V1::CalendarRatesController < ApplicationController
         )
         .order(:date)
 
-    @calendar_rates_hash =
-      @calendar_rates.each_with_object({}) do |calendar_rate, hash|
-        hash[
-          calendar_rate.date.strftime("%m-%d-%Y")
-        ] = calendar_rate.attributes.merge(rate: calendar_rate.rate)
+    serialized_data =
+      CalendarRateSerializer.new(calendar_rates).serializable_hash[:data]
+
+    response_data =
+      serialized_data.each_with_object({}) do |calendar_rate, hash|
+        attributes = calendar_rate[:attributes]
+        hash[attributes[:formatted_date]] = attributes.except(:formatted_date)
       end
 
-    render json: @calendar_rates_hash.to_json
+    render json: response_data
   end
 
   # GET /calendar_rates/1

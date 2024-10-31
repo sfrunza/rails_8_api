@@ -4,9 +4,12 @@ class Api::V1::MovingServicesController < ApplicationController
 
   # GET /moving_services
   def index
-    @moving_services = MovingService.all.order(:index)
+    moving_services = MovingService.all.order(:index)
+    serialized_data =
+      MovingServiceSerializer.new(moving_services).serializable_hash[:data]
+    response_data = serialized_data.map { |s| s[:attributes] }
 
-    render json: @moving_services
+    render json: response_data
   end
 
   # GET /moving_services/1

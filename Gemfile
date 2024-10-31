@@ -55,3 +55,5 @@ group :development, :test do
   gem "ruby-lsp", require: false
   gem "syntax_tree", "~> 6.2", require: false
 end
+
+gem "fast_jsonapi", "~> 1.5"
