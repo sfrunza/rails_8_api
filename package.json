@@ -4,6 +4,7 @@
         "node": ">=18.0.0"
     },
     "scripts": {
+        "dev": "foreman start -f Procfile.dev",
         "clean": "rm -rf public",
         "build": "cd client && npm install && npm run build && cd ..",
         "deploy": "cp -a client/dist/. public/",

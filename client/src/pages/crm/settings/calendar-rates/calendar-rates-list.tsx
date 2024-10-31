@@ -1,5 +1,16 @@
+import { useState } from 'react';
+import { format } from 'date-fns';
+import toast from 'react-hot-toast';
+
 import { api } from '@/api';
+import useRates from '@/hooks/use-rates';
+import useCalendarRates from '@/hooks/use-calendar-rates';
+import { hexToRgb } from '@/lib/helpers';
+import { TCalendarRate } from '@/types/rates';
+
 import { CalendarWithRates } from '@/components/calendar-with-rates';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import {
   Dialog,
   DialogContent,
@@ -7,16 +18,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import useCalendarRates from '@/hooks/use-calendar-rates';
-import useRates from '@/hooks/use-rates';
-// import useCalendarRates from '@/hooks/useCalendarRates';
-// import useRates from '@/hooks/useRates';
-import { hexToRgb } from '@/lib/helpers';
-import { TCalendarRate } from '@/types/rates';
-import { format } from 'date-fns';
-import { useState } from 'react';
 
 const getNextSixMonths = (): Date[] => {
   const months: Date[] = [];
@@ -52,15 +53,16 @@ export default function CalendarRatesList() {
     }
 
     try {
-      const response = await api.patch(`/calendar_rates/${id}`, {
+      await api.patch(`/calendar_rates/${id}`, {
         calendar_rate: newData,
       });
 
-      const data = response.data;
-      if (data) {
-        mutate();
+      mutate();
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
       }
-    } catch (error) {}
+    }
   }
 
   function handleSelectDate(date: Date, rateData: TCalendarRate): void {
@@ -68,8 +70,8 @@ export default function CalendarRatesList() {
     setSelectedDate(date);
     setSelectedDateInfo(rateData);
 
-    console.log('Selected date:', date);
-    console.log('Rate data:', rateData);
+    // console.log('Selected date:', date);
+    // console.log('Rate data:', rateData);
   }
 
   return (

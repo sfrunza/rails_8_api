@@ -32,11 +32,7 @@ async function verifyAuthLoader() {
   }
 
   try {
-    const response = await api.get('/auth/verify', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await api.get('/auth/verify');
     const data: ResponseData = response.data;
 
     if (data.error) {
