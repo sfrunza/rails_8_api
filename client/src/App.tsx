@@ -20,6 +20,7 @@ import RatesPage from './pages/crm/settings/rates/rates-page';
 import CalendarRatesPage from './pages/crm/settings/calendar-rates/calendar-rates-page';
 import MessagesPage from './pages/crm/messages/messages-page';
 import MessagePage from './pages/crm/messages/message/message-page';
+import TrucksPage from './pages/crm/settings/trucks/trucks-page';
 
 type ResponseData = {
   error?: string;
@@ -115,7 +116,7 @@ const router = createBrowserRouter([
           },
           {
             path: 'trucks',
-            element: <div>trucks</div>,
+            element: <TrucksPage />,
           },
           {
             path: 'rates',

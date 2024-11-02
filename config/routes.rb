@@ -22,6 +22,10 @@ Rails.application.routes.draw do
         post "bulk_update", on: :collection
       end
 
+      resources :trucks do
+        post "bulk_update", on: :collection
+      end
+
       resources :calendar_rates, only: %i[index create update]
       get "/calendar_rates/:date", to: "calendar_rates#show", as: "show"
 

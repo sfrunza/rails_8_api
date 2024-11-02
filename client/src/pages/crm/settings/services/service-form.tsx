@@ -1,5 +1,5 @@
+import { PlusIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { PlusCircleIcon } from 'lucide-react';
 import { z } from 'zod';
 
 import LoadingButton from '@/components/loading-button';
@@ -65,9 +65,9 @@ export default function ServiceForm() {
             )}
           />
           <LoadingButton loading={false} disabled={false}>
-            <span className="flex items-center">
-              <PlusCircleIcon className="size-5 mr-2" />
-              Add service
+            <span className="flex items-center space-x-2">
+              <PlusIcon className="flex size-5" />
+              <span className="hidden lg:block">Add Service</span>
             </span>
           </LoadingButton>
         </form>
