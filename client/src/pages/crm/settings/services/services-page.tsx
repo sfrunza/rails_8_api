@@ -1,3 +1,4 @@
+import SettingPageWrapper from '@/components/setting-page-wrapper';
 import {
   Card,
   CardContent,
@@ -6,21 +7,12 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { ChevronLeftIcon } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import ServiceForm from './service-form';
 import ServiceList from './service-list';
 
 export default function ServicesPage() {
   return (
-    <>
-      <Link
-        to="/crm/settings"
-        className="md:hidden flex gap-2 items-center text-muted-foreground mb-6"
-      >
-        <ChevronLeftIcon className="size-5" />
-        Settings
-      </Link>
+    <SettingPageWrapper>
       <Card className="max-w-xl">
         <CardHeader>
           <CardTitle>Moving Services</CardTitle>
@@ -32,6 +24,6 @@ export default function ServicesPage() {
           <ServiceList />
         </CardContent>
       </Card>
-    </>
+    </SettingPageWrapper>
   );
 }

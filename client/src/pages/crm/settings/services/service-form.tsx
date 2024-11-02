@@ -58,6 +58,7 @@ export default function ServiceForm() {
                     {...field}
                     placeholder="Service name"
                     className="w-full"
+                    autoComplete="off"
                   />
                 </FormControl>
               </FormItem>

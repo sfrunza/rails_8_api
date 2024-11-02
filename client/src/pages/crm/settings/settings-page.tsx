@@ -9,13 +9,15 @@ import { TruckIcon } from 'lucide-react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
 import { cn } from '@/lib/utils';
+import { buttonVariants } from '@/components/ui/button';
+import PageContainer from '@/components/page-container';
 
-import { sidebarMenuButtonVariants } from '@/components/ui/sidebar';
+// import { sidebarMenuButtonVariants } from '@/components/ui/sidebar';
 
 export const navLinks = [
   {
     name: 'Moving Services',
-    href: '/crm/settings/services',
+    href: 'services',
     icon: PencilRulerIcon,
   },
   {
@@ -25,58 +27,61 @@ export const navLinks = [
   },
   {
     name: 'Packing',
-    href: '/crm/settings/packing',
+    href: 'packing',
     icon: Package2Icon,
   },
-  { name: 'Trucks', href: '/crm/settings/trucks', icon: TruckIcon },
+  { name: 'Trucks', href: 'trucks', icon: TruckIcon },
   {
     name: 'Rates',
-    href: '/crm/settings/rates',
+    href: 'rates',
     icon: DollarSignIcon,
   },
   {
     name: 'Calendar Rates',
-    href: '/crm/settings/calendar-rates',
+    href: 'calendar-rates',
     icon: CalendarCogIcon,
   },
 ];
 
 export default function SettingsPage() {
   const { pathname } = useLocation();
-  return (
-    <div className="grid min-h-full w-full rounded-lg md:grid-cols-[12rem_1fr]">
-      <div
-        className={cn(
-          'md:border-r pr-4',
-          pathname === '/crm/settings' ? 'block' : 'hidden md:block'
-        )}
-      >
-        <ul role="list" className="flex w-full flex-col gap-2">
-          {navLinks.map((item, i) => {
-            const active = item.href === pathname;
+  const pageUrl = '/crm/settings';
+  const lastPathSegment = pathname.split('/').filter(Boolean).pop();
 
+  return (
+    <div className="grid lg:rounded-tl-2xl lg:grid-cols-[16rem_1fr] h-full overflow-hidden bg-muted">
+      <PageContainer
+        className={cn('pb-28 p-4 hidden lg:block border-r', {
+          block: pathname === pageUrl,
+        })}
+      >
+        <div className="flex w-full flex-col gap-2">
+          {navLinks.map((item, i) => {
+            const isCurrentPage = item.href === lastPathSegment;
             return (
-              <li key={i} className="w-full">
-                <Link
-                  to={item.href}
-                  className={cn(
-                    sidebarMenuButtonVariants({
-                      variant: active ? 'outline' : 'default',
-                    }),
-                    'text-sidebar-foreground'
-                  )}
-                >
-                  <item.icon />
-                  <span>{item.name}</span>
-                </Link>
-              </li>
+              <Link
+                key={i}
+                to={item.href}
+                className={cn(
+                  buttonVariants({
+                    variant: isCurrentPage ? 'secondary' : 'ghost',
+                    size: 'lg',
+                    className: 'justify-start w-full',
+                  })
+                )}
+              >
+                <item.icon className="size-5" />
+                <span>{item.name}</span>
+              </Link>
             );
           })}
-        </ul>
-      </div>
-      <div className="overflow-hidden md:px-4">
+        </div>
+      </PageContainer>
+      {pageUrl !== pathname ? (
         <Outlet />
-      </div>
+      ) : (
+        <div className="hidden lg:flex justify-center items-center w-full h-full" />
+      )}
     </div>
   );
 }

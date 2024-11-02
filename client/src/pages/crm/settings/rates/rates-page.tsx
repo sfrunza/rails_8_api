@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
-import { ChevronLeftIcon, SquarePenIcon } from 'lucide-react';
-import toast from 'react-hot-toast';
 import { api } from '@/api';
-// import BackButton from "@/components/back-button";
+import { SquarePenIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -15,10 +14,10 @@ import {
 import { Switch } from '@/components/ui/switch';
 
 import { centsToDollars, formatMoney, hexToRgb } from '@/lib/helpers';
-// import LoadingButton from "@/components/ui/loading-button";
-// import { centsToDollars, cn, formatMoney } from '@/lib/utils';
+import LoadingButton from '@/components/loading-button';
+import SettingPageWrapper from '@/components/setting-page-wrapper';
+import Spinner from '@/components/spinner';
 import { Input } from '@/components/ui/input';
-import useRates from '@/hooks/use-rates';
 import {
   Table,
   TableBody,
@@ -27,11 +26,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { TRate } from '@/types/rates';
-import Spinner from '@/components/spinner';
-import LoadingButton from '@/components/loading-button';
+import useRates from '@/hooks/use-rates';
 import { cn } from '@/lib/utils';
-import { Link } from 'react-router-dom';
+import { TRate } from '@/types/rates';
 
 export default function RatesPage() {
   const { dbRates, isLoading, mutate } = useRates();
@@ -78,14 +75,7 @@ export default function RatesPage() {
   if (!items) return null;
 
   return (
-    <>
-      <Link
-        to="/crm/settings"
-        className="md:hidden flex gap-2 items-center text-muted-foreground mb-6"
-      >
-        <ChevronLeftIcon className="size-5" />
-        Settings
-      </Link>
+    <SettingPageWrapper>
       <Card className="max-w-screen-lg overflow-hidden">
         <CardHeader>
           <CardTitle>Rates</CardTitle>
@@ -305,6 +295,6 @@ export default function RatesPage() {
           </div>
         </CardFooter>
       </Card>
-    </>
+    </SettingPageWrapper>
   );
 }

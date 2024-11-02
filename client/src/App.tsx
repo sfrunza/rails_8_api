@@ -18,6 +18,8 @@ import ServicesPage from '@/pages/crm/settings/services/services-page';
 import PrivateRoute from '@/components/private-route';
 import RatesPage from './pages/crm/settings/rates/rates-page';
 import CalendarRatesPage from './pages/crm/settings/calendar-rates/calendar-rates-page';
+import MessagesPage from './pages/crm/messages/messages-page';
+import MessagePage from './pages/crm/messages/message/message-page';
 
 type ResponseData = {
   error?: string;
@@ -88,6 +90,16 @@ const router = createBrowserRouter([
       {
         path: 'requests',
         element: <RequestsPage />,
+      },
+      {
+        path: 'messages',
+        element: <MessagesPage />,
+        children: [
+          {
+            path: ':requestId',
+            element: <MessagePage />,
+          },
+        ],
       },
       {
         path: 'settings',
