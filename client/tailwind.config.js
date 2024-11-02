@@ -1,9 +1,25 @@
 /** @type {import('tailwindcss').Config} */
+
+import defaultTheme from 'tailwindcss/defaultTheme';
+
 export default {
   darkMode: ['class'],
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        sans: [
+          ['--mona-sans', ...defaultTheme.fontFamily.sans],
+          {
+            // fontVariationSettings: '"wdth" 105',
+            fontStyle: 'normal',
+          },
+        ],
+        display: [
+          ['--mona-sans', ...defaultTheme.fontFamily.sans],
+          { fontVariationSettings: '"wdth" 125' },
+        ],
+      },
       boxShadow: {
         button:
           'rgba(100, 137, 139, 0) 0px 0px 0px 0px, rgba(100, 117, 139, 0) 0px 0px 0px 0px, rgba(100, 117, 139, 0.34) 0px 1px 1px 0px, rgba(226, 232, 240, 1) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(100, 117, 139, 0.08) 0px 2px 5px 0px',
