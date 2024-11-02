@@ -68,7 +68,7 @@ export default function MessagePage() {
   const currentUser = 'Bob';
 
   return (
-    <PageContainer className="bg-muted grid grid-rows-[4rem_auto_5rem] h-[calc(100%-64px)]">
+    <PageContainer className="bg-muted grid grid-rows-[3rem_auto_6rem] h-[calc(100%-64px)]">
       <div className="flex bg-background w-full justify-between items-center border-b px-4">
         <Link to="/crm/messages" className="md:hidden text-blue-500">
           <ChevronLeftIcon className="size-6" />
@@ -92,7 +92,7 @@ export default function MessagePage() {
           e.preventDefault();
           console.log('Message sent');
         }}
-        className="p-4 bg-background flex justify-center items-center gap-4"
+        className="p-4 pb-8 bg-background flex justify-center items-center gap-4"
       >
         <Textarea placeholder="Type a message..." />
         <Button type="submit" className="uppercase">
