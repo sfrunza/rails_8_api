@@ -26,6 +26,7 @@ export function MobileMenu() {
           className="border-none bg-transparent p-0 shadow-none hover:bg-muted/10"
         >
           <PanelLeftIcon className="h-5 w-5 rounded-md text-white" />
+          <span className="sr-only">Open Sidebar</span>
         </Button>
       </SheetTrigger>
       <SheetContent side="left">

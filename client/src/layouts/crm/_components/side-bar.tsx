@@ -27,6 +27,7 @@ export default function SideBar() {
               >
                 <Link to={item.href}>
                   <item.icon className="size-5" aria-hidden="true" />
+                  <span className="sr-only">{item.name}</span>
                 </Link>
               </Button>
             </li>

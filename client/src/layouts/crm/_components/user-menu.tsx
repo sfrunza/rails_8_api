@@ -28,12 +28,14 @@ export default function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="hover:cursor-pointer">
-          <AvatarImage src="" alt="Avatar" />
-          <AvatarFallback>
-            {getInitials(user?.first_name, user?.last_name)}
-          </AvatarFallback>
-        </Avatar>
+        <Button variant="ghost" size="icon" className="rounded-full">
+          <Avatar className="hover:cursor-pointer">
+            <AvatarImage src="" alt="Avatar" />
+            <AvatarFallback>
+              {getInitials(user?.first_name, user?.last_name)}
+            </AvatarFallback>
+          </Avatar>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 p-3">
         <div className="mb-2">
