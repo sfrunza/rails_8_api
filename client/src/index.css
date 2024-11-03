@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+a {
+  -webkit-touch-callout: none;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

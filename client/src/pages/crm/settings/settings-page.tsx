@@ -22,7 +22,7 @@ export const navLinks = [
   },
   {
     name: 'Extra Services',
-    href: '#',
+    href: 'extra-services',
     icon: HousePlusIcon,
   },
   {

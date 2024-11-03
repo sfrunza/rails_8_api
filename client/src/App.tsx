@@ -22,6 +22,7 @@ import MessagesPage from './pages/crm/messages/messages-page';
 import MessagePage from './pages/crm/messages/message/message-page';
 import TrucksPage from './pages/crm/settings/trucks/trucks-page';
 import PackingServicesPage from './pages/crm/settings/packing-services/packing-services-page';
+import ExtraServicesPage from './pages/crm/settings/extra-services/extra-services-page';
 
 type ResponseData = {
   error?: string;
@@ -110,6 +111,10 @@ const router = createBrowserRouter([
           {
             path: 'services',
             element: <ServicesPage />,
+          },
+          {
+            path: 'extra-services',
+            element: <ExtraServicesPage />,
           },
           {
             path: 'packing',
