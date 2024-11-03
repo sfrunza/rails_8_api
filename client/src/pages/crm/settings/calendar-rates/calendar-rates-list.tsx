@@ -74,7 +74,7 @@ export default function CalendarRatesList() {
 
   if (isLoading) {
     return (
-      <div className="gap-4 grid grid-cols-2">
+      <div className="gap-4 grid lg:grid-cols-2">
         {Array.from({ length: 6 }).map((_, i) => (
           <div key={i} className="flex justify-center items-center">
             <Skeleton className="h-[285px] w-[276px]" />
