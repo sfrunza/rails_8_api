@@ -9,6 +9,14 @@ class Api::V1::TrucksController < ApplicationController
     response_data = serialized_data.map { |s| s[:attributes] }
 
     render json: response_data
+
+    # if serialized_data.empty?
+    #   render(plain: "[]")
+    # else
+    #   response_data = serialized_data.map { |s| s[:attributes] }
+
+    #   render json: response_data
+    # end
   end
 
   # GET /trucks/1

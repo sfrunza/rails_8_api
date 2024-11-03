@@ -86,7 +86,7 @@ export default function CalendarRatesList() {
 
   return (
     <>
-      <div className="grid justify-items-center gap-y-6 xl:grid-cols-2">
+      <div className="grid justify-items-center gap-y-6 lg:grid-cols-2">
         {months.map((monthDate, i) => {
           return (
             <CalendarWithRates

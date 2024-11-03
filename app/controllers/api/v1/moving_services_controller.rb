@@ -39,9 +39,9 @@ class Api::V1::MovingServicesController < ApplicationController
 
   # POST /moving_services/bulk_update
   def bulk_update
-    @moving_service = params[:services]
+    @moving_services = params[:services]
 
-    @moving_service.each do |service|
+    @moving_services.each do |service|
       s = MovingService.find(service[:id])
       s.update(
         index: service[:index],
@@ -49,7 +49,7 @@ class Api::V1::MovingServicesController < ApplicationController
         enabled: service[:enabled]
       )
     end
-    render json: @moving_service, status: :accepted
+    render json: @moving_services, status: :accepted
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Service not found" }, status: :not_found
   rescue StandardError => e
