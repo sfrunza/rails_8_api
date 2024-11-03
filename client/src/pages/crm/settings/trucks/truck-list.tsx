@@ -3,13 +3,13 @@ import toast from 'react-hot-toast';
 import { TruckIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import Spinner from '@/components/spinner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import useTrucks from '@/hooks/use-trucks';
 import LoadingButton from '@/components/loading-button';
 import { TTruck } from '@/types/trucks';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function TruckList() {
   const { trucks, isUpdating, isLoading, error, updateTrucks } = useTrucks();
@@ -41,8 +41,10 @@ export default function TruckList() {
 
   if (isLoading) {
     return (
-      <div className="flex w-full items-center justify-center">
-        <Spinner className="text-muted-foreground" />
+      <div className="space-y-4 mt-6">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Skeleton className="h-9 w-full" key={i} />
+        ))}
       </div>
     );
   }

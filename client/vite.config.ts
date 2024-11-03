@@ -5,7 +5,7 @@ import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
 
 const manifestForPlugIn: Partial<VitePWAOptions> = {
   registerType: 'autoUpdate',
-  devOptions: { enabled: true },
+  // devOptions: { enabled: true },
   manifest: {
     display: "standalone",
     name: "Moving App",

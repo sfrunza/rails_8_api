@@ -18,6 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const getNextSixMonths = (): Date[] => {
   const months: Date[] = [];
@@ -37,7 +38,7 @@ const getNextSixMonths = (): Date[] => {
 
 export default function CalendarRatesList() {
   const months = getNextSixMonths();
-  const { mutate } = useCalendarRates();
+  const { mutate, isLoading } = useCalendarRates();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedDateInfo, setSelectedDateInfo] = useState<TCalendarRate>();
@@ -69,9 +70,18 @@ export default function CalendarRatesList() {
     setIsOpen(true);
     setSelectedDate(date);
     setSelectedDateInfo(rateData);
+  }
 
-    // console.log('Selected date:', date);
-    // console.log('Rate data:', rateData);
+  if (isLoading) {
+    return (
+      <div className="gap-4 grid grid-cols-2">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="flex justify-center items-center">
+            <Skeleton className="h-[285px] w-[276px]" />
+          </div>
+        ))}
+      </div>
+    );
   }
 
   return (

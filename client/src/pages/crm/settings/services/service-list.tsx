@@ -30,9 +30,10 @@ import { Button } from '@/components/ui/button';
 import useMovingServices from '@/hooks/use-moving-services';
 import { TMovingService } from '@/types/moving-services';
 import ServiceItem from './service-item';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function ServiceList() {
-  const { movingServices, updateMovingServices, isUpdating } =
+  const { movingServices, isLoading, error, updateMovingServices, isUpdating } =
     useMovingServices();
   const [items, setItems] = useState<TMovingService[]>([]);
   const [orderChanged, setOrderChanged] = useState<boolean>(false);
@@ -113,13 +114,23 @@ export default function ServiceList() {
   //   );
   // }
 
-  // if (error) {
-  //   return (
-  //     <div className="flex w-full items-center justify-center text-muted-foreground">
-  //       {error.message}
-  //     </div>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <div className="space-y-4 mt-6">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <Skeleton className="h-9 w-full" key={i} />
+        ))}
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex w-full items-center justify-center text-muted-foreground">
+        {error.message}
+      </div>
+    );
+  }
 
   return (
     <div className="mt-6 flex flex-col gap-6">
@@ -134,7 +145,7 @@ export default function ServiceList() {
         ]}
       >
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
-          <div className="space-y-3">
+          <div className="space-y-4">
             {items.map((item) => (
               <ServiceItem
                 key={item.id}
