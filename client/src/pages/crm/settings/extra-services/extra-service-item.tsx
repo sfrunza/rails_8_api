@@ -9,7 +9,7 @@ import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { TExtraService } from '@/types/extra-services';
-import { centsToDollars } from '@/lib/helpers';
+import PriceInput from '@/components/price-input';
 
 export default function ExtraServiceItem({
   id,
@@ -17,10 +17,9 @@ export default function ExtraServiceItem({
   onChange,
 }: {
   id: number;
-  item: any;
+  item: TExtraService;
   onChange: (itemId: number, value: Partial<TExtraService>) => void;
 }) {
-  const isDefaultItem = item.is_default;
   const {
     attributes,
     listeners,
@@ -42,7 +41,7 @@ export default function ExtraServiceItem({
       ref={setNodeRef}
       style={style}
       className={cn(
-        'grid gap-4 items-center grid-cols-[18px_3fr_1fr_1fr_1fr]',
+        'grid gap-4 items-center font-medium grid-cols-[18px_3fr_1fr_1fr_1fr]',
         {
           'bg-background': isDragging,
         }
@@ -57,18 +56,15 @@ export default function ExtraServiceItem({
           const value = e.target.value;
           onChange(item.id, { name: value });
         }}
-        disabled={isDefaultItem}
         name={item.name}
       />
-      <Input
-        pattern="[0-9]+"
-        inputMode="numeric"
-        value={centsToDollars(item.price) || ''}
-        onChange={(e) => {
-          const value = e.target.value;
-          if (/^\d*$/.test(value)) {
-            onChange(item.id, { price: Math.round(parseFloat(value) * 100) });
-          }
+
+      <PriceInput
+        value={item.price}
+        onChange={(val) => {
+          onChange(item.id, {
+            price: val,
+          });
         }}
       />
       <Switch

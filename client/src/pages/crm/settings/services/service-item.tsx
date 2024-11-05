@@ -4,22 +4,18 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { GripVerticalIcon } from 'lucide-react';
 
-import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 
 export default function ServiceItem({
   id,
   item,
-  updateItemName,
   onEnabledChange,
 }: {
   id: number;
   item: any;
-  updateItemName: (index: number, value: string) => void;
   onEnabledChange: (index: number, value: boolean) => void;
 }) {
-  const isDefaultItem = item.is_default;
   const {
     attributes,
     listeners,
@@ -40,30 +36,26 @@ export default function ServiceItem({
     <div
       ref={setNodeRef}
       style={style}
-      className={cn('flex flex-row items-center gap-2 rounded-lg', {
+      className={cn('grid gap-4 grid-cols-[18px_1fr_3rem] items-center py-3', {
         'bg-background': isDragging,
       })}
     >
       <div {...attributes} {...listeners} className="flex min-w-6">
         <GripVerticalIcon className="size-5 text-muted-foreground" />
       </div>
-      <Input
-        value={item.name}
-        onChange={(e) => {
-          const value = e.target.value;
-          updateItemName(item.id, value);
-        }}
-        disabled={isDefaultItem}
-        name={item.name}
-      />
-      <Switch
-        checked={item.enabled}
-        onCheckedChange={(val) => {
-          console.log('switched', val);
-          onEnabledChange(item.id, val);
-        }}
-        className="ml-10"
-      />
+      <div>
+        <p className="text-sm font-medium">{item.name}</p>
+      </div>
+      <div className="flex justify-end">
+        <Switch
+          checked={item.enabled}
+          onCheckedChange={(val) => {
+            console.log('switched', val);
+            onEnabledChange(item.id, val);
+          }}
+          className="ml-10"
+        />
+      </div>
     </div>
   );
 }

@@ -20,11 +20,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import toast from 'react-hot-toast';
-
 import { cn } from '@/lib/utils';
-
-// import useServices from "@/hooks/useServices";
-
 import LoadingButton from '@/components/loading-button';
 import { Button } from '@/components/ui/button';
 import useMovingServices from '@/hooks/use-moving-services';
@@ -66,15 +62,6 @@ export default function ServiceList() {
     }
   }
 
-  const updateItemName = (itemId: number, value: string) => {
-    setItems((prev: TMovingService[]) => {
-      return prev.map((item) =>
-        item.id === itemId ? { ...item, name: value } : item
-      );
-    });
-    setOrderChanged(true);
-  };
-
   function onEnabledChange(itemId: number, value: boolean) {
     setItems((prev: TMovingService[]) => {
       return prev.map((item) =>
@@ -86,11 +73,6 @@ export default function ServiceList() {
 
   async function handleSaveChanges() {
     try {
-      // const response = await api.post('/moving_services/bulk_update', {
-      //   services: items,
-      // });
-
-      // console.log(response);
       await updateMovingServices(items, {
         onSuccess: () => {
           toast.success('Changes saved successfully!');
@@ -106,24 +88,6 @@ export default function ServiceList() {
     }
   }
 
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex w-full items-center justify-center">
-  //       <Spinner />
-  //     </div>
-  //   );
-  // }
-
-  if (isLoading) {
-    return (
-      <div className="space-y-4 mt-6">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <Skeleton className="h-9 w-full" key={i} />
-        ))}
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <div className="flex w-full items-center justify-center text-muted-foreground">
@@ -134,30 +98,38 @@ export default function ServiceList() {
 
   return (
     <div className="mt-6 flex flex-col gap-6">
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-        modifiers={[
-          restrictToVerticalAxis,
-          restrictToFirstScrollableAncestor,
-          restrictToParentElement,
-        ]}
-      >
-        <SortableContext items={items} strategy={verticalListSortingStrategy}>
-          <div className="space-y-4">
-            {items.map((item) => (
-              <ServiceItem
-                key={item.id}
-                id={item.id}
-                item={item}
-                updateItemName={updateItemName}
-                onEnabledChange={onEnabledChange}
-              />
-            ))}
-          </div>
-        </SortableContext>
-      </DndContext>
+      {isLoading && (
+        <div className="space-y-2.5">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <Skeleton className="h-9 w-full" key={i} />
+          ))}
+        </div>
+      )}
+      {movingServices && (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+          modifiers={[
+            restrictToVerticalAxis,
+            restrictToFirstScrollableAncestor,
+            restrictToParentElement,
+          ]}
+        >
+          <SortableContext items={items} strategy={verticalListSortingStrategy}>
+            <div className="divide-y">
+              {items.map((item) => (
+                <ServiceItem
+                  key={item.id}
+                  id={item.id}
+                  item={item}
+                  onEnabledChange={onEnabledChange}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
+      )}
       <div className="border-t pt-4">
         <div
           className={cn('flex transition-opacity duration-500 sm:justify-end', {

@@ -1,7 +1,8 @@
-import { api } from '@/api';
-import { SquarePenIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { SquarePenIcon } from 'lucide-react';
+
+import { api } from '@/api';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -13,22 +14,17 @@ import {
 } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 
-import { centsToDollars, formatMoney, hexToRgb } from '@/lib/helpers';
 import LoadingButton from '@/components/loading-button';
+import PriceInput from '@/components/price-input';
 import SettingPageWrapper from '@/components/setting-page-wrapper';
 import { Input } from '@/components/ui/input';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
 import useRates from '@/hooks/use-rates';
+import { formatMoney, hexToRgb } from '@/lib/helpers';
 import { cn } from '@/lib/utils';
 import { TRate } from '@/types/rates';
-import { Skeleton } from '@/components/ui/skeleton';
 
 export default function RatesPage() {
   const { dbRates, isLoading, mutate } = useRates();
@@ -82,203 +78,142 @@ export default function RatesPage() {
           <CardDescription>Manage your rates.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4 py-6">
-          <Table className="min-w-[770px]">
-            <TableHeader>
-              <TableRow className="hover:bg-background">
-                <TableHead className="w-48">Name</TableHead>
-                <TableHead>2 movers</TableHead>
-                <TableHead>3 movers</TableHead>
-                <TableHead>4 movers</TableHead>
-                <TableHead>Extra mover</TableHead>
-                <TableHead>Extra truck</TableHead>
-                <TableHead>Off/On</TableHead>
-                <TableHead className="text-right"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {isLoading &&
-                Array.from({ length: 5 }).map((_, i) => (
-                  <TableRow className="h-16 hover:bg-background" key={i}>
-                    <TableCell>
-                      <Skeleton className="h-9 w-[176px]" />
-                    </TableCell>
-                    <TableCell className="w-[92px]">
-                      <Skeleton className="h-9 w-full" />
-                    </TableCell>
-                    <TableCell className="w-[92px]">
-                      <Skeleton className="h-9 w-full" />
-                    </TableCell>
-                    <TableCell className="w-[92px]">
-                      <Skeleton className="h-9 w-full" />
-                    </TableCell>
-                    <TableCell className="w-[115px]">
-                      <Skeleton className="h-9 w-full" />
-                    </TableCell>
-                    <TableCell className="w-[107px]">
-                      <Skeleton className="h-9 w-full" />
-                    </TableCell>
-                    <TableCell className="w-[76px]">
-                      <Skeleton className="h-9 w-full" />
-                    </TableCell>
-                    <TableCell className="w-[115px]">
-                      <Skeleton className="h-9 w-full" />
-                    </TableCell>
-                  </TableRow>
-                ))}
-
+          <ScrollArea className="w-fullwhitespace-nowrap">
+            <div className="grid gap-4 px-1 text-muted-foreground font-medium text-sm mb-4 items-center grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr]">
+              <p>Name</p>
+              <p>2 movers</p>
+              <p>3 movers</p>
+              <p>4 movers</p>
+              <p>Extra mover</p>
+              <p>Extra truck</p>
+              <p>On/Off</p>
+              <p></p>
+            </div>
+            <Separator />
+            <div className="divide-y min-w-[900px]">
+              {isLoading && <LoadingSkeleton />}
               {items?.map((rate, idx) => (
-                <TableRow key={idx} className="h-16 hover:bg-background">
-                  <TableCell className="font-medium">
-                    {currentEdit === idx ? (
-                      <div className="flex items-center justify-between gap-2">
-                        <Input
-                          className="p-2"
-                          value={rate.name}
-                          onChange={(e) => {
-                            // console.log(e.target.value);
-                            handleUpdateRate({
-                              ...rate,
-                              name: e.target.value,
-                            });
-                          }}
-                        />
-                        <input
-                          className="size-9 rounded p-0"
-                          type="color"
-                          value={rate.color}
-                          onChange={(e) => {
-                            handleUpdateRate({
-                              ...rate,
-                              color: e.target.value,
-                            });
-                          }}
-                        />
-                      </div>
-                    ) : (
-                      <span
-                        className="flex items-center gap-2 rounded-sm px-2 py-1"
-                        style={{
-                          color: rate.color,
-                          backgroundColor: `rgba(${hexToRgb(rate.color)}, 0.1)`,
+                <div
+                  key={idx}
+                  className="grid px-1 gap-4 py-4 text-sm font-medium items-center grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr]"
+                >
+                  {currentEdit === idx ? (
+                    <div className="grid grid-cols-[auto_36px] gap-2">
+                      <Input
+                        value={rate.name}
+                        onChange={(e) => {
+                          handleUpdateRate({
+                            ...rate,
+                            name: e.target.value,
+                          });
                         }}
-                      >
-                        {rate.name}
-                        <span
-                          className="h-2 w-2 rounded-full"
-                          style={{
-                            backgroundColor: rate.color,
-                          }}
-                        ></span>
-                      </span>
-                    )}
-                  </TableCell>
+                      />
+                      <Input
+                        type="color"
+                        value={rate.color}
+                        onChange={(e) => {
+                          handleUpdateRate({
+                            ...rate,
+                            color: e.target.value,
+                          });
+                        }}
+                        className="py-0 px-[2px]"
+                      />
+                    </div>
+                  ) : (
+                    <span
+                      className="flex items-center gap-2 h-9 rounded-sm px-2 py-1"
+                      style={{
+                        color: rate.color,
+                        backgroundColor: `rgba(${hexToRgb(rate.color)}, 0.1)`,
+                      }}
+                    >
+                      {rate.name}
+                      <span
+                        className="h-2 w-2 rounded-full"
+                        style={{
+                          backgroundColor: rate.color,
+                        }}
+                      ></span>
+                    </span>
+                  )}
                   {Object.keys(rate.movers_rates)
                     .slice(0, 3)
-                    .map((mover) => {
+                    .map((mover, i) => {
                       const hRate = rate.movers_rates[mover].hourly_rate;
                       // console.log(hRate);
                       if (currentEdit === idx) {
                         return (
-                          <TableCell key={mover}>
-                            <Input
-                              className="w-14 p-2"
-                              pattern="[0-9]+"
-                              inputMode="numeric"
-                              value={centsToDollars(hRate) || ''}
-                              onChange={(e) => {
-                                const value = e.target.value;
-                                if (/^\d*$/.test(value)) {
-                                  rate.movers_rates[mover].hourly_rate =
-                                    Math.round(parseFloat(value) * 100);
-                                  handleUpdateRate({
-                                    ...rate,
-                                    ...rate.movers_rates,
-                                  });
-                                }
-                              }}
-                            />
-                          </TableCell>
+                          <PriceInput
+                            value={hRate}
+                            onChange={(val) => {
+                              rate.movers_rates[mover].hourly_rate = val;
+                              handleUpdateRate({
+                                ...rate,
+                                ...rate.movers_rates,
+                              });
+                            }}
+                            key={i}
+                          />
                         );
                       }
-                      return (
-                        <TableCell key={mover}>{formatMoney(hRate)}</TableCell>
-                      );
+                      return <div key={i}>{formatMoney(hRate)}</div>;
                     })}
-                  <TableCell>
+                  <div>
                     {currentEdit === idx ? (
-                      <Input
-                        className="w-14 p-2"
-                        pattern="[0-9]+"
-                        inputMode="numeric"
-                        value={centsToDollars(rate.extra_mover_rate) || ''}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          if (/^\d*$/.test(value)) {
-                            handleUpdateRate({
-                              ...rate,
-                              extra_mover_rate: Math.round(
-                                parseFloat(value) * 100
-                              ),
-                            });
-                          }
-                        }}
+                      <PriceInput
+                        value={rate.extra_mover_rate}
+                        onChange={(val) =>
+                          handleUpdateRate({
+                            ...rate,
+                            extra_mover_rate: val,
+                          })
+                        }
                       />
                     ) : (
                       formatMoney(rate.extra_mover_rate)
                     )}
-                  </TableCell>
-                  <TableCell>
+                  </div>
+                  <div>
                     {currentEdit === idx ? (
-                      <Input
-                        className="w-14 p-2"
-                        pattern="[0-9]+"
-                        inputMode="numeric"
-                        value={centsToDollars(rate.extra_truck_rate) || ''}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          if (/^\d*$/.test(value)) {
-                            handleUpdateRate({
-                              ...rate,
-                              extra_truck_rate: Math.round(
-                                parseFloat(value) * 100
-                              ),
-                            });
-                          }
-                        }}
+                      <PriceInput
+                        value={rate.extra_truck_rate}
+                        onChange={(val) =>
+                          handleUpdateRate({
+                            ...rate,
+                            extra_truck_rate: val,
+                          })
+                        }
                       />
                     ) : (
                       formatMoney(rate.extra_truck_rate)
                     )}
-                  </TableCell>
-                  <TableCell>
-                    <Switch
-                      id={rate.name}
-                      checked={rate.enable}
-                      onCheckedChange={(checked) => {
-                        handleUpdateRate({
-                          ...rate,
-                          enable: checked,
-                        });
-                      }}
-                    />
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="text-primary hover:text-primary"
-                      onClick={() => {
-                        setCurrentEdit((prev) => (prev === idx ? null : idx));
-                      }}
-                    >
-                      <SquarePenIcon className="mr-2 size-4" />
-                      Edit
-                    </Button>
-                  </TableCell>
-                </TableRow>
+                  </div>
+                  <Switch
+                    id={rate.name}
+                    checked={rate.enable}
+                    onCheckedChange={(checked) => {
+                      handleUpdateRate({
+                        ...rate,
+                        enable: checked,
+                      });
+                    }}
+                  />
+                  <Button
+                    variant="ghost"
+                    className="text-primary hover:text-primary"
+                    onClick={() => {
+                      setCurrentEdit((prev) => (prev === idx ? null : idx));
+                    }}
+                  >
+                    <SquarePenIcon className="size-4" />
+                    Edit
+                  </Button>
+                </div>
               ))}
-            </TableBody>
-          </Table>
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
         </CardContent>
         <CardFooter className="border-t justify-end py-4">
           <div
@@ -315,5 +250,27 @@ export default function RatesPage() {
         </CardFooter>
       </Card>
     </SettingPageWrapper>
+  );
+}
+
+function LoadingSkeleton() {
+  return (
+    <>
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div
+          key={i}
+          className="grid px-1 gap-4 py-4 text-sm font-medium items-center grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr]"
+        >
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="h-9 w-full" />
+        </div>
+      ))}
+    </>
   );
 }

@@ -68,7 +68,7 @@ export default function MessagePage() {
   const currentUser = 'Bob';
 
   return (
-    <PageContainer className="bg-muted grid grid-rows-[3rem_auto_6rem] h-[calc(100%-64px)]">
+    <PageContainer className="bg-muted grid grid-rows-[3rem_auto_7rem] h-[calc(100%-64px)]">
       <div className="flex bg-background w-full justify-between items-center border-b px-4">
         <Link to="/crm/messages" className="md:hidden text-blue-500">
           <ChevronLeftIcon className="size-6" />
@@ -127,7 +127,6 @@ function Message({ sender, message, timestamp, isSender }: MessageProps) {
           }
         )}
       >
-        {' '}
         <p className="text-sm">{sender}</p>
         <p className="text-sm">{message}</p>
         <p

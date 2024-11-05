@@ -52,4 +52,7 @@ a {
   body {
     @apply bg-background text-foreground;
   }
+  input[type='color']::-webkit-color-swatch {
+    @apply border-none rounded-sm;
+  }
 }

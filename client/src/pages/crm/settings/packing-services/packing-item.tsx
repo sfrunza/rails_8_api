@@ -45,7 +45,7 @@ export default function PackingItem({ item }: { item: TPackingService }) {
         )}
       </div>
       <div className="grid md:grid-cols-[auto_12rem] grid-cols-[auto_5rem] items-center border-b py-2 overflow-hidden">
-        <p className="text-sm truncate">{item.name}</p>
+        <p className="text-sm font-medium truncate">{item.name}</p>
         <div className="flex justify-between items-center">
           <Button
             variant="ghost"

@@ -39,16 +39,6 @@ export default function TruckList() {
     }
   }
 
-  if (isLoading) {
-    return (
-      <div className="space-y-4 mt-6">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton className="h-9 w-full" key={i} />
-        ))}
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <div className="flex w-full items-center justify-center text-muted-foreground">
@@ -60,8 +50,18 @@ export default function TruckList() {
   return (
     <div className="mt-6 flex flex-col gap-6">
       <div className="space-y-4">
+        {isLoading && (
+          <>
+            {Array.from({ length: 3 }).map((_, i) => (
+              <Skeleton className="h-9 w-full" key={i} />
+            ))}
+          </>
+        )}
         {items?.map((truck, idx) => (
-          <div key={truck.id} className="flex items-center gap-6 md:gap-10">
+          <div
+            key={truck.id}
+            className="flex font-medium items-center gap-6 md:gap-10"
+          >
             <div className="flex min-w-fit items-center gap-4 text-sm text-muted-foreground">
               <TruckIcon className="size-5" />
               <span>Truck {idx + 1}</span>

@@ -16,7 +16,7 @@ export default function ExtraServicesPage() {
           <CardTitle>Extra Services</CardTitle>
           <CardDescription>Manage your extra services.</CardDescription>
         </CardHeader>
-        <CardContent className="pb-4">
+        <CardContent className="p-6">
           <ExtraServiceList />
         </CardContent>
       </Card>

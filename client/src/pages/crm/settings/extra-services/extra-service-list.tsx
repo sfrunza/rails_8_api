@@ -24,6 +24,7 @@ import { Button } from '@/components/ui/button';
 import LoadingButton from '@/components/loading-button';
 import { cn } from '@/lib/utils';
 import { TExtraService } from '@/types/extra-services';
+import { Separator } from '@/components/ui/separator';
 
 const extraServices = [
   {
@@ -94,13 +95,14 @@ export default function ExtraServiceList() {
   return (
     <div className="">
       <ScrollArea className="w-full whitespace-nowrap">
-        <div className="grid gap-4 text-muted-foreground font-medium text-sm border-b pb-4 items-center grid-cols-[18px_3fr_1fr_1fr_1fr]">
+        <div className="grid gap-4 text-muted-foreground font-medium text-sm mb-4 items-center grid-cols-[18px_3fr_1fr_1fr_1fr]">
           <p></p>
           <p>Service name</p>
-          <p>Service cost</p>
+          <p>Service cost, $</p>
           <p>Enable</p>
           <p></p>
         </div>
+        <Separator />
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
@@ -112,7 +114,7 @@ export default function ExtraServiceList() {
           ]}
         >
           <SortableContext items={items} strategy={verticalListSortingStrategy}>
-            <div className="min-w-[700px] space-y-4 py-4">
+            <div className="min-w-[600px] space-y-4 py-6">
               {items.map((item) => (
                 <ExtraServiceItem
                   key={item.id}

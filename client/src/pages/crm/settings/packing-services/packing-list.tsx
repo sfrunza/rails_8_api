@@ -86,16 +86,6 @@ export default function PackingList() {
     }
   }
 
-  if (isLoading) {
-    return (
-      <div className="space-y-2 mt-6">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <Skeleton className="h-10 w-full" key={i} />
-        ))}
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <div className="flex w-full items-center justify-center text-muted-foreground">
@@ -106,24 +96,33 @@ export default function PackingList() {
 
   return (
     <div className="mt-4 flex flex-col gap-6">
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragEnd={handleDragEnd}
-        modifiers={[
-          restrictToVerticalAxis,
-          restrictToFirstScrollableAncestor,
-          restrictToParentElement,
-        ]}
-      >
-        <SortableContext items={items} strategy={verticalListSortingStrategy}>
-          <div className="">
-            {items.map((item) => (
-              <PackingItem key={item.id} item={item} />
-            ))}
-          </div>
-        </SortableContext>
-      </DndContext>
+      {isLoading && (
+        <div className="space-y-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton className="h-11 w-full" key={i} />
+          ))}
+        </div>
+      )}
+      {packingServices && (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+          modifiers={[
+            restrictToVerticalAxis,
+            restrictToFirstScrollableAncestor,
+            restrictToParentElement,
+          ]}
+        >
+          <SortableContext items={items} strategy={verticalListSortingStrategy}>
+            <div className="">
+              {items.map((item) => (
+                <PackingItem key={item.id} item={item} />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
+      )}
       <div className="border-t pt-4">
         <div
           className={cn('flex transition-opacity duration-500 sm:justify-end', {
