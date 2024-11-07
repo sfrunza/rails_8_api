@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import { SquarePenIcon } from 'lucide-react';
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { SquarePenIcon } from "lucide-react";
 
-import { api } from '@/api';
-import { Button } from '@/components/ui/button';
+import { api } from "@/api";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,20 +11,20 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Switch } from '@/components/ui/switch';
+} from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 
-import LoadingButton from '@/components/loading-button';
-import PriceInput from '@/components/price-input';
-import SettingPageWrapper from '@/components/setting-page-wrapper';
-import { Input } from '@/components/ui/input';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
-import { Skeleton } from '@/components/ui/skeleton';
-import useRates from '@/hooks/use-rates';
-import { formatMoney, hexToRgb } from '@/lib/helpers';
-import { cn } from '@/lib/utils';
-import { TRate } from '@/types/rates';
+import LoadingButton from "@/components/loading-button";
+import PriceInput from "@/components/price-input";
+import SettingPageWrapper from "@/components/setting-page-wrapper";
+import { Input } from "@/components/ui/input";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import useRates from "@/hooks/use-rates";
+import { formatMoney, hexToRgb } from "@/lib/helpers";
+import { cn } from "@/lib/utils";
+import { TRate } from "@/types/rates";
 
 export default function RatesPage() {
   const { dbRates, isLoading, mutate } = useRates();
@@ -41,7 +41,7 @@ export default function RatesPage() {
 
   function handleUpdateRate(rate: TRate) {
     const updatedItems = items.map((item) =>
-      item.id === rate.id ? rate : item
+      item.id === rate.id ? rate : item,
     );
     setItems(updatedItems);
     setIsChanged(true);
@@ -49,7 +49,7 @@ export default function RatesPage() {
 
   async function handleSaveChanges() {
     try {
-      const response = await api.post('/rates/bulk_update', {
+      const response = await api.post("/rates/bulk_update", {
         rates: items,
       });
 
@@ -59,7 +59,7 @@ export default function RatesPage() {
         setIsChanged(false);
         setCurrentEdit(null);
       } else {
-        toast.error('Something went wrong');
+        toast.error("Something went wrong");
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -79,7 +79,7 @@ export default function RatesPage() {
         </CardHeader>
         <CardContent className="space-y-4 py-6">
           <ScrollArea className="w-fullwhitespace-nowrap">
-            <div className="grid gap-4 px-1 text-muted-foreground font-medium text-sm mb-4 items-center grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr]">
+            <div className="mb-4 grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr] items-center gap-4 px-1 text-sm font-medium text-muted-foreground">
               <p>Name</p>
               <p>2 movers</p>
               <p>3 movers</p>
@@ -90,12 +90,12 @@ export default function RatesPage() {
               <p></p>
             </div>
             <Separator />
-            <div className="divide-y min-w-[900px]">
+            <div className="min-w-[900px] divide-y">
               {isLoading && <LoadingSkeleton />}
               {items?.map((rate, idx) => (
                 <div
                   key={idx}
-                  className="grid px-1 gap-4 py-4 text-sm font-medium items-center grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr]"
+                  className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr] items-center gap-4 px-1 py-4 text-sm font-medium"
                 >
                   {currentEdit === idx ? (
                     <div className="grid grid-cols-[auto_36px] gap-2">
@@ -117,12 +117,12 @@ export default function RatesPage() {
                             color: e.target.value,
                           });
                         }}
-                        className="py-0 px-[2px]"
+                        className="px-[2px] py-0"
                       />
                     </div>
                   ) : (
                     <span
-                      className="flex items-center gap-2 h-9 rounded-sm px-2 py-1"
+                      className="flex h-9 items-center gap-2 rounded-sm px-2 py-1"
                       style={{
                         color: rate.color,
                         backgroundColor: `rgba(${hexToRgb(rate.color)}, 0.1)`,
@@ -141,12 +141,11 @@ export default function RatesPage() {
                     .slice(0, 3)
                     .map((mover, i) => {
                       const hRate = rate.movers_rates[mover].hourly_rate;
-                      // console.log(hRate);
                       if (currentEdit === idx) {
                         return (
                           <PriceInput
                             value={hRate}
-                            onChange={(val) => {
+                            onValueChange={(val) => {
                               rate.movers_rates[mover].hourly_rate = val;
                               handleUpdateRate({
                                 ...rate,
@@ -163,7 +162,7 @@ export default function RatesPage() {
                     {currentEdit === idx ? (
                       <PriceInput
                         value={rate.extra_mover_rate}
-                        onChange={(val) =>
+                        onValueChange={(val) =>
                           handleUpdateRate({
                             ...rate,
                             extra_mover_rate: val,
@@ -178,7 +177,7 @@ export default function RatesPage() {
                     {currentEdit === idx ? (
                       <PriceInput
                         value={rate.extra_truck_rate}
-                        onChange={(val) =>
+                        onValueChange={(val) =>
                           handleUpdateRate({
                             ...rate,
                             extra_truck_rate: val,
@@ -215,14 +214,14 @@ export default function RatesPage() {
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </CardContent>
-        <CardFooter className="border-t justify-end py-4">
+        <CardFooter className="justify-end border-t py-4">
           <div
             className={cn(
-              'flex min-h-9 w-full gap-4 sm:w-auto transition-opacity duration-500',
+              "flex min-h-9 w-full gap-4 transition-opacity duration-500 sm:w-auto",
               {
-                'invisible opacity-0': !isChanged,
-                'visible opacity-100': isChanged,
-              }
+                "invisible opacity-0": !isChanged,
+                "visible opacity-100": isChanged,
+              },
             )}
           >
             <Button
@@ -259,7 +258,7 @@ function LoadingSkeleton() {
       {Array.from({ length: 5 }).map((_, i) => (
         <div
           key={i}
-          className="grid px-1 gap-4 py-4 text-sm font-medium items-center grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr]"
+          className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr] items-center gap-4 px-1 py-4"
         >
           <Skeleton className="h-9 w-full" />
           <Skeleton className="h-9 w-full" />

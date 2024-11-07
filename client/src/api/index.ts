@@ -36,10 +36,12 @@ function createAxiosResponse() {
   }
 }
 
+// export const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
 export const fetcher = (url: string) =>
   createAxiosResponse()!
     .get(url)
-    .then(async (res) => {
+    .then((res) => {
       // await new Promise((resolve) => setTimeout(resolve, 2000));
       return res.data;
     });

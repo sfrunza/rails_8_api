@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from 'lucide-react';
+import { ChevronDownIcon } from "lucide-react";
 
 // import useServices from "@/hooks/useServices";
 
@@ -8,9 +8,9 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import LoadingButton from '@/components/loading-button';
-import useMovingServices from '@/hooks/use-moving-services';
+} from "@/components/ui/dropdown-menu";
+import LoadingButton from "@/components/loading-button";
+import useMovingServices from "@/hooks/use-moving-service";
 
 export default function CreateRequestButton() {
   // const navigate = useNavigate();
@@ -21,7 +21,7 @@ export default function CreateRequestButton() {
   const enabledServices = movingServices?.filter((service) => service.enabled);
 
   async function handleCreateRequest(serviceId: number) {
-    console.log('serviceId', serviceId);
+    console.log("serviceId", serviceId);
     // setIsCreating(true);
     // try {
     //   const newRequest = await createRequestAction({ service_id: serviceId });

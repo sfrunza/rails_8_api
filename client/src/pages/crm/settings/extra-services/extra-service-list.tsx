@@ -1,3 +1,11 @@
+import LoadingButton from "@/components/loading-button";
+import { Button } from "@/components/ui/button";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import useExtraServices from "@/hooks/use-extra-service";
+import { cn } from "@/lib/utils";
+import { TExtraService } from "@/types/extra-service";
 import {
   DndContext,
   KeyboardSensor,
@@ -5,67 +13,40 @@ import {
   closestCenter,
   useSensor,
   useSensors,
-} from '@dnd-kit/core';
+} from "@dnd-kit/core";
 import {
   restrictToFirstScrollableAncestor,
   restrictToParentElement,
   restrictToVerticalAxis,
-} from '@dnd-kit/modifiers';
+} from "@dnd-kit/modifiers";
 import {
   SortableContext,
   arrayMove,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import { useState } from 'react';
-import ExtraServiceItem from './extra-service-item';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { Button } from '@/components/ui/button';
-import LoadingButton from '@/components/loading-button';
-import { cn } from '@/lib/utils';
-import { TExtraService } from '@/types/extra-services';
-import { Separator } from '@/components/ui/separator';
-
-const extraServices = [
-  {
-    id: 1,
-    name: 'Piano Fee',
-    price: 10000,
-    enabled: true,
-    index: 0,
-  },
-  {
-    id: 2,
-    name: 'Piano1 Fee',
-    price: 10000,
-    enabled: true,
-    index: 1,
-  },
-  {
-    id: 3,
-    name: 'Piano2 Fee',
-    price: 10000,
-    enabled: true,
-    index: 2,
-  },
-  {
-    id: 4,
-    name: 'Piano3 Fee',
-    price: 10000,
-    enabled: true,
-    index: 3,
-  },
-];
+} from "@dnd-kit/sortable";
+import { useEffect, useState } from "react";
+import ExtraServiceItem from "./extra-service-item";
+import ExtraServiceForm from "./extra-service-form";
 
 export default function ExtraServiceList() {
-  const [items, setItems] = useState<TExtraService[]>(extraServices);
+  const { extraServices, isLoading, error, update, isUpdating } =
+    useExtraServices();
+  const [items, setItems] = useState<TExtraService[]>([]);
   const [orderChanged, setOrderChanged] = useState<boolean>(false);
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
+
+  useEffect(() => {
+    if (extraServices) {
+      setItems(extraServices);
+    }
+  }, [extraServices]);
 
   function onDragEnd(event: any) {
     const { active, over } = event;
@@ -73,10 +54,11 @@ export default function ExtraServiceList() {
     if (over && active.id !== over.id) {
       const oldIndex = items.findIndex((item) => item.id === active.id);
       const newIndex = items.findIndex((item) => item.id === over.id);
-
-      const updatedItems = arrayMove(items, oldIndex, newIndex).map(
-        (item, index) => ({ ...item, index: index })
-      );
+      const newItems = arrayMove(items, oldIndex, newIndex);
+      const updatedItems = newItems.map((item, index) => ({
+        ...item,
+        index,
+      }));
 
       setItems(updatedItems);
       setOrderChanged(true);
@@ -86,16 +68,25 @@ export default function ExtraServiceList() {
   function onChange(itemId: number, values: Partial<TExtraService>) {
     setItems((prev) => {
       return prev.map((item) =>
-        item.id === itemId ? { ...item, ...values } : item
+        item.id === itemId ? { ...item, ...values } : item,
       );
     });
     setOrderChanged(true);
   }
 
+  if (error) {
+    return (
+      <div className="flex w-full items-center justify-center text-muted-foreground">
+        {error.message}
+      </div>
+    );
+  }
+
   return (
-    <div className="">
+    <>
+      <ExtraServiceForm />
       <ScrollArea className="w-full whitespace-nowrap">
-        <div className="grid gap-4 text-muted-foreground font-medium text-sm mb-4 items-center grid-cols-[18px_3fr_1fr_1fr_1fr]">
+        <div className="mb-4 grid grid-cols-[18px_3fr_1fr_1fr_1fr] items-center gap-4 text-sm font-medium text-muted-foreground">
           <p></p>
           <p>Service name</p>
           <p>Service cost, $</p>
@@ -103,36 +94,42 @@ export default function ExtraServiceList() {
           <p></p>
         </div>
         <Separator />
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={onDragEnd}
-          modifiers={[
-            restrictToVerticalAxis,
-            restrictToFirstScrollableAncestor,
-            restrictToParentElement,
-          ]}
-        >
-          <SortableContext items={items} strategy={verticalListSortingStrategy}>
-            <div className="min-w-[600px] space-y-4 py-6">
-              {items.map((item) => (
-                <ExtraServiceItem
-                  key={item.id}
-                  id={item.id}
-                  item={item}
-                  onChange={onChange}
-                />
-              ))}
-            </div>
-          </SortableContext>
-        </DndContext>
+        {isLoading && <LoadingSkeleton />}
+        {extraServices && (
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={onDragEnd}
+            modifiers={[
+              restrictToVerticalAxis,
+              restrictToFirstScrollableAncestor,
+              restrictToParentElement,
+            ]}
+          >
+            <SortableContext
+              items={items}
+              strategy={verticalListSortingStrategy}
+            >
+              <div className="my-6 min-w-[600px] space-y-4">
+                {items.map((item) => (
+                  <ExtraServiceItem
+                    key={item.id}
+                    id={item.id}
+                    item={item}
+                    onChange={onChange}
+                  />
+                ))}
+              </div>
+            </SortableContext>
+          </DndContext>
+        )}
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
       <div className="border-t pt-4">
         <div
-          className={cn('flex transition-opacity duration-500 sm:justify-end', {
-            'invisible opacity-0': !orderChanged,
-            'visible opacity-100': orderChanged,
+          className={cn("flex transition-opacity duration-500 sm:justify-end", {
+            "invisible opacity-0": !orderChanged,
+            "visible opacity-100": orderChanged,
           })}
         >
           <div className="flex min-h-9 w-full gap-4 sm:w-auto">
@@ -141,7 +138,7 @@ export default function ExtraServiceList() {
               variant="outline"
               className="w-full sm:w-auto"
               onClick={() => {
-                setItems(extraServices);
+                setItems(extraServices!);
                 setOrderChanged(false);
               }}
             >
@@ -150,15 +147,34 @@ export default function ExtraServiceList() {
             <LoadingButton
               type="button"
               className="w-full sm:w-auto"
-              disabled={false}
-              loading={false}
-              onClick={() => console.log('click')}
+              disabled={isUpdating}
+              loading={isUpdating}
+              onClick={async () => {
+                await update(items);
+                setOrderChanged(false);
+              }}
             >
               Save changes
             </LoadingButton>
           </div>
         </div>
       </div>
+    </>
+  );
+}
+
+function LoadingSkeleton() {
+  return (
+    <div className="space-y-4 py-6">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div key={i} className="grid grid-cols-[18px_3fr_1fr_1fr_1fr] gap-4">
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="h-9 w-full" />
+          <Skeleton className="h-9 w-full" />
+        </div>
+      ))}
     </div>
   );
 }

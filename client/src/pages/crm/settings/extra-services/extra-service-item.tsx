@@ -1,15 +1,16 @@
-import { CSSProperties } from 'react';
+import { CSSProperties } from "react";
 
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { GripVerticalIcon, TrashIcon } from 'lucide-react';
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { GripVerticalIcon, TrashIcon } from "lucide-react";
 
-import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { TExtraService } from '@/types/extra-services';
-import PriceInput from '@/components/price-input';
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
+import { TExtraService } from "@/types/extra-service";
+import PriceInput from "@/components/price-input";
+import useExtraServices from "@/hooks/use-extra-service";
+import LoadingButton from "@/components/loading-button";
 
 export default function ExtraServiceItem({
   id,
@@ -20,6 +21,7 @@ export default function ExtraServiceItem({
   item: TExtraService;
   onChange: (itemId: number, value: Partial<TExtraService>) => void;
 }) {
+  const { isDeleting, remove } = useExtraServices();
   const {
     attributes,
     listeners,
@@ -32,8 +34,8 @@ export default function ExtraServiceItem({
   const style: CSSProperties = {
     transform: CSS.Transform.toString(transform),
     transition,
-    zIndex: isDragging ? 1000 : 'auto',
-    position: isDragging ? 'relative' : 'static',
+    zIndex: isDragging ? 1000 : "auto",
+    position: isDragging ? "relative" : "static",
   };
 
   return (
@@ -41,10 +43,10 @@ export default function ExtraServiceItem({
       ref={setNodeRef}
       style={style}
       className={cn(
-        'grid gap-4 items-center font-medium grid-cols-[18px_3fr_1fr_1fr_1fr]',
+        "grid grid-cols-[18px_3fr_1fr_1fr_1fr] items-center gap-4 font-medium",
         {
-          'bg-background': isDragging,
-        }
+          "bg-background": isDragging,
+        },
       )}
     >
       <div {...attributes} {...listeners} className="flex min-w-6">
@@ -61,7 +63,7 @@ export default function ExtraServiceItem({
 
       <PriceInput
         value={item.price}
-        onChange={(val) => {
+        onValueChange={(val) => {
           onChange(item.id, {
             price: val,
           });
@@ -74,10 +76,18 @@ export default function ExtraServiceItem({
         }}
       />
       <div className="flex justify-end">
-        <Button variant="ghost" className="hover:text-red-500">
-          <TrashIcon className="size-4" />
-          Delete
-        </Button>
+        <LoadingButton
+          disabled={isDeleting}
+          loading={isDeleting}
+          variant="ghost"
+          className="hover:text-red-500"
+          onClick={() => remove(item.id)}
+        >
+          <span className="flex gap-2">
+            <TrashIcon className="size-4" />
+            Delete
+          </span>
+        </LoadingButton>
       </div>
     </div>
   );

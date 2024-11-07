@@ -1,11 +1,11 @@
-import { CSSProperties } from 'react';
+import { CSSProperties } from "react";
 
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { GripVerticalIcon } from 'lucide-react';
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { GripVerticalIcon } from "lucide-react";
 
-import { Switch } from '@/components/ui/switch';
-import { cn } from '@/lib/utils';
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 
 export default function ServiceItem({
   id,
@@ -28,16 +28,16 @@ export default function ServiceItem({
   const style: CSSProperties = {
     transform: CSS.Transform.toString(transform),
     transition,
-    zIndex: isDragging ? 1000 : 'auto',
-    position: isDragging ? 'relative' : 'static',
+    zIndex: isDragging ? 1000 : "auto",
+    position: isDragging ? "relative" : "static",
   };
 
   return (
     <div
       ref={setNodeRef}
       style={style}
-      className={cn('grid gap-4 grid-cols-[18px_1fr_3rem] items-center py-3', {
-        'bg-background': isDragging,
+      className={cn("grid grid-cols-[18px_1fr_3rem] items-center gap-4 py-3", {
+        "bg-background": isDragging,
       })}
     >
       <div {...attributes} {...listeners} className="flex min-w-6">
@@ -50,7 +50,6 @@ export default function ServiceItem({
         <Switch
           checked={item.enabled}
           onCheckedChange={(val) => {
-            console.log('switched', val);
             onEnabledChange(item.id, val);
           }}
           className="ml-10"

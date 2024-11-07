@@ -3,4 +3,5 @@ export type TExtraService = {
   name: string;
   price: number;
   enabled: boolean
+  index: number;
 }

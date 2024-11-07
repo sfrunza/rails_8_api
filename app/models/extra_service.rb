@@ -1,0 +1,2 @@
+class ExtraService < ApplicationRecord
+end

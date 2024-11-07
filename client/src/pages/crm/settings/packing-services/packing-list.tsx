@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 import {
   DndContext,
@@ -7,44 +7,38 @@ import {
   closestCenter,
   useSensor,
   useSensors,
-} from '@dnd-kit/core';
+} from "@dnd-kit/core";
 import {
   restrictToFirstScrollableAncestor,
   restrictToParentElement,
   restrictToVerticalAxis,
-} from '@dnd-kit/modifiers';
+} from "@dnd-kit/modifiers";
 import {
   SortableContext,
   arrayMove,
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import toast from 'react-hot-toast';
+} from "@dnd-kit/sortable";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-import LoadingButton from '@/components/loading-button';
-import { Button } from '@/components/ui/button';
-import PackingItem from './packing-item';
-import { Skeleton } from '@/components/ui/skeleton';
-import usePackingServices from '@/hooks/use-packing-services';
-import { TPackingService } from '@/types/packing-services';
+import LoadingButton from "@/components/loading-button";
+import { Button } from "@/components/ui/button";
+import PackingItem from "./packing-item";
+import { Skeleton } from "@/components/ui/skeleton";
+import usePackingServices from "@/hooks/use-packing";
+import { TPackingService } from "@/types/packing";
 
 export default function PackingList() {
-  const {
-    packingServices,
-    isLoading,
-    error,
-    updatePackingServices,
-    isUpdating,
-  } = usePackingServices();
+  const { packingServices, isLoading, error, bulkUpdate, isUpdating } =
+    usePackingServices();
   const [items, setItems] = useState<TPackingService[]>([]);
   const [orderChanged, setOrderChanged] = useState<boolean>(false);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   useEffect(() => {
@@ -61,28 +55,11 @@ export default function PackingList() {
       const newIndex = items.findIndex((item) => item.id === over.id);
 
       const updatedItems = arrayMove(items, oldIndex, newIndex).map(
-        (item, index) => ({ ...item, index: index })
+        (item, index) => ({ ...item, index: index }),
       );
 
       setItems(updatedItems);
       setOrderChanged(true);
-    }
-  }
-
-  async function handleSaveChanges() {
-    try {
-      await updatePackingServices(items, {
-        onSuccess: () => {
-          toast.success('Changes saved successfully!');
-          setOrderChanged(false);
-        },
-        onError: (error) => {
-          toast.error(error.message);
-          setItems(packingServices!);
-        },
-      });
-    } catch (err) {
-      toast.error('An unexpected error occurred.');
     }
   }
 
@@ -125,9 +102,9 @@ export default function PackingList() {
       )}
       <div className="border-t pt-4">
         <div
-          className={cn('flex transition-opacity duration-500 sm:justify-end', {
-            'invisible opacity-0': !orderChanged,
-            'visible opacity-100': orderChanged,
+          className={cn("flex transition-opacity duration-500 sm:justify-end", {
+            "invisible opacity-0": !orderChanged,
+            "visible opacity-100": orderChanged,
           })}
         >
           <div className="flex min-h-9 w-full gap-4 sm:w-auto">
@@ -147,7 +124,10 @@ export default function PackingList() {
               className="w-full sm:w-auto"
               disabled={isUpdating}
               loading={isUpdating}
-              onClick={handleSaveChanges}
+              onClick={async () => {
+                await bulkUpdate(items);
+                setOrderChanged(false);
+              }}
             >
               Save changes
             </LoadingButton>

@@ -8,8 +8,6 @@ import toast from "react-hot-toast";
 import useSWR from "swr";
 
 export default function useCalendarRates() {
-  // const dispatch = useAppDispatch();
-
   const { data, error, isLoading, mutate } = useSWR<TCalendarRateData | null | undefined>("/calendar_rates", null, {
     onError: () => {
       if (!navigator.onLine) {

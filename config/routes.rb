@@ -18,6 +18,10 @@ Rails.application.routes.draw do
         post "bulk_update", on: :collection
       end
 
+      resources :extra_services do
+        post "bulk_update", on: :collection
+      end
+
       resources :rates do
         post "bulk_update", on: :collection
       end

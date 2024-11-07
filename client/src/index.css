@@ -14,7 +14,7 @@ a {
     --card-foreground: 240 10% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-    --primary: 142.1 76.2% 36.3%;
+    --primary: 151.1 100% 32.16%;
     --primary-foreground: 0 0% 100%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
@@ -38,12 +38,12 @@ a {
 
 @layer base {
   @font-face {
-    font-family: '--mona-sans';
+    font-family: "--mona-sans";
     font-weight: 200 900;
     font-display: block;
     font-style: normal;
     font-stretch: 75% 125%;
-    src: url('./assets/fonts/Mona-Sans.var.woff2') format('woff2');
+    src: url("./assets/fonts/Mona-Sans.var.woff2") format("woff2");
   }
 
   * {
@@ -52,7 +52,7 @@ a {
   body {
     @apply bg-background text-foreground;
   }
-  input[type='color']::-webkit-color-swatch {
-    @apply border-none rounded-sm;
+  input[type="color"]::-webkit-color-swatch {
+    @apply rounded-sm border-none;
   }
 }

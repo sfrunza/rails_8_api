@@ -1,30 +1,30 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { api } from '@/api';
+import { api } from "@/api";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { setCredentials } from '@/slices/auth-slice';
-import { useAppDispatch } from '@/store';
-import { AxiosError } from 'axios';
-import toast from 'react-hot-toast';
-import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import LoadingButton from '@/components/loading-button';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { setCredentials } from "@/slices/auth-slice";
+import { useAppDispatch } from "@/store";
+import { AxiosError } from "axios";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import LoadingButton from "@/components/loading-button";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -42,29 +42,29 @@ export default function Login() {
   const form = useForm<Inputs>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
   });
 
   async function onSubmit(values: Inputs) {
     setLoading(true);
     try {
-      const response = await api.post('/auth/login', values);
+      const response = await api.post("/auth/login", values);
       const { token, user } = response.data;
 
       dispatch(setCredentials({ user, token }));
 
       // Redirect based on user role
       switch (user.role) {
-        case 'admin':
-          navigate('/crm');
+        case "admin":
+          navigate("/crm");
           break;
-        case 'customer':
-          navigate('/account');
+        case "customer":
+          navigate("/account");
           break;
         default:
-          navigate('/');
+          navigate("/");
           break;
       }
     } catch (error) {
@@ -122,7 +122,7 @@ export default function Login() {
               />
               <LoadingButton
                 type="submit"
-                className="w-full mt-2"
+                className="mt-2 w-full"
                 disabled={loading}
                 loading={loading}
               >
