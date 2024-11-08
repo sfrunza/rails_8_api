@@ -41,7 +41,11 @@ class Api::V1::RatesController < ApplicationController
         movers_rates: rate[:movers_rates]
       )
     end
-    render json: { success: "Changes saved successfully." }, status: :accepted
+    render json: @rates, status: :accepted
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "Rate not found" }, status: :not_found
+  rescue StandardError => e
+    render json: { error: e.message }, status: :unprocessable_entity
   end
 
   # PATCH/PUT /rates/1

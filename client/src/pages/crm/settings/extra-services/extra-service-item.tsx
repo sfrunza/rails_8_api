@@ -9,8 +9,8 @@ import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { TExtraService } from "@/types/extra-service";
 import PriceInput from "@/components/price-input";
-import useExtraServices from "@/hooks/use-extra-service";
 import LoadingButton from "@/components/loading-button";
+import { useResource } from "@/hooks/use-resource";
 
 export default function ExtraServiceItem({
   id,
@@ -21,7 +21,7 @@ export default function ExtraServiceItem({
   item: TExtraService;
   onChange: (itemId: number, value: Partial<TExtraService>) => void;
 }) {
-  const { isDeleting, remove } = useExtraServices();
+  const { isDeleting, handleDelete } = useResource("extra_services");
   const {
     attributes,
     listeners,
@@ -81,7 +81,7 @@ export default function ExtraServiceItem({
           loading={isDeleting}
           variant="ghost"
           className="hover:text-red-500"
-          onClick={() => remove(item.id)}
+          onClick={() => handleDelete(item.id)}
         >
           <span className="flex gap-2">
             <TrashIcon className="size-4" />

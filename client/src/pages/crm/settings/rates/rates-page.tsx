@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { SquarePenIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 
-import { api } from "@/api";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,13 +19,21 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import useRates from "@/hooks/use-rates";
+import { useResource } from "@/hooks/use-resource";
 import { formatMoney, hexToRgb } from "@/lib/helpers";
 import { cn } from "@/lib/utils";
 import { TRate } from "@/types/rates";
 
+const tableGrid =
+  "grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr] items-center gap-4 px-1 text-sm font-medium";
+
 export default function RatesPage() {
-  const { dbRates, isLoading, mutate } = useRates();
+  const {
+    data: dbRates,
+    isLoading,
+    isBulkUpdating,
+    handleBulkUpdate,
+  } = useResource("rates");
 
   const [items, setItems] = useState<TRate[]>([]);
   const [isChanged, setIsChanged] = useState<boolean>(false);
@@ -47,29 +53,6 @@ export default function RatesPage() {
     setIsChanged(true);
   }
 
-  async function handleSaveChanges() {
-    try {
-      const response = await api.post("/rates/bulk_update", {
-        rates: items,
-      });
-
-      if (response.data.success) {
-        mutate();
-        toast.success(response.data.success);
-        setIsChanged(false);
-        setCurrentEdit(null);
-      } else {
-        toast.error("Something went wrong");
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    }
-  }
-
-  if (!items) return null;
-
   return (
     <SettingPageWrapper>
       <Card className="max-w-screen-lg overflow-hidden">
@@ -79,7 +62,7 @@ export default function RatesPage() {
         </CardHeader>
         <CardContent className="space-y-4 py-6">
           <ScrollArea className="w-fullwhitespace-nowrap">
-            <div className="mb-4 grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr] items-center gap-4 px-1 text-sm font-medium text-muted-foreground">
+            <div className={cn("mb-4 text-muted-foreground", tableGrid)}>
               <p>Name</p>
               <p>2 movers</p>
               <p>3 movers</p>
@@ -93,10 +76,7 @@ export default function RatesPage() {
             <div className="min-w-[900px] divide-y">
               {isLoading && <LoadingSkeleton />}
               {items?.map((rate, idx) => (
-                <div
-                  key={idx}
-                  className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr] items-center gap-4 px-1 py-4 text-sm font-medium"
-                >
+                <div key={idx} className={cn("py-4", tableGrid)}>
                   {currentEdit === idx ? (
                     <div className="grid grid-cols-[auto_36px] gap-2">
                       <Input
@@ -239,9 +219,13 @@ export default function RatesPage() {
             <LoadingButton
               type="button"
               className="w-full sm:w-auto"
-              disabled={false}
-              loading={false}
-              onClick={handleSaveChanges}
+              disabled={isBulkUpdating}
+              loading={isBulkUpdating}
+              onClick={async () => {
+                await handleBulkUpdate({ rates: items });
+                setCurrentEdit(null);
+                setIsChanged(false);
+              }}
             >
               Save changes
             </LoadingButton>

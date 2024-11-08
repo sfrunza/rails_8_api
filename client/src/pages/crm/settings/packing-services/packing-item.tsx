@@ -8,12 +8,12 @@ import { Button } from "@/components/ui/button";
 import { TPackingService } from "@/types/packing";
 import { useIsMobile } from "@/hooks/use-mobile";
 import PackingForm from "./packing-form";
-import usePacking from "@/hooks/use-packing";
 import LoadingButton from "@/components/loading-button";
+import { useResource } from "@/hooks/use-resource";
 
 export default function PackingItem({ item }: { item: TPackingService }) {
   const isMobile = useIsMobile();
-  const { isDeleting, remove } = usePacking();
+  const { isDeleting, handleDelete } = useResource("packing_services");
   const isDefaultItem = item.is_default;
   const {
     attributes,
@@ -65,7 +65,7 @@ export default function PackingItem({ item }: { item: TPackingService }) {
               loading={isDeleting}
               variant="ghost"
               className="hover:text-red-500"
-              onClick={() => remove(item.id)}
+              onClick={() => handleDelete(item.id)}
               size={isMobile ? "icon" : "default"}
             >
               <span className="flex gap-2">

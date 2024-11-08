@@ -18,6 +18,7 @@ export type TCalendarRate = {
   enable_auto_booking: boolean;
   is_blocked: boolean;
   date: string
+  rate_id: number | null;
   rate: TRate;
 };
 

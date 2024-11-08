@@ -26,7 +26,7 @@ import { TPackingService } from "@/types/packing";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { SquarePenIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import usePacking from "@/hooks/use-packing";
+import { useResource } from "@/hooks/use-resource";
 
 const formSchema = z.object({
   name: z.string(),
@@ -41,7 +41,8 @@ type PackingFormProps = {
 };
 
 export default function PackingForm({ data }: PackingFormProps) {
-  const { isAdding, add, update, isUpdating } = usePacking();
+  const { isCreating, isUpdating, handleCreate, handleUpdate } =
+    useResource("packing_services");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const isMobile = useIsMobile();
   const isEditing = !!data;
@@ -66,11 +67,11 @@ export default function PackingForm({ data }: PackingFormProps) {
     setIsOpen((prev) => !prev);
   }
 
-  async function onSubmit(values: Inputs) {
+  function onSubmit(values: Inputs) {
     if (isEditing) {
-      await update(data.id, values);
+      handleUpdate(data.id, values);
     } else {
-      await add(values);
+      handleCreate(values);
     }
     onClose();
   }
@@ -153,8 +154,8 @@ export default function PackingForm({ data }: PackingFormProps) {
               </Button>
               <LoadingButton
                 type="submit"
-                loading={isAdding ?? isUpdating}
-                disabled={isAdding ?? isUpdating}
+                loading={isCreating ?? isUpdating}
+                disabled={isCreating ?? isUpdating}
                 className="w-full sm:w-auto"
               >
                 {isEditing ? "Save changes" : "Add packing"}

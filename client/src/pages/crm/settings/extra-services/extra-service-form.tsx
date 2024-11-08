@@ -22,7 +22,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import useExtraServices from "@/hooks/use-extra-service";
+import { useResource } from "@/hooks/use-resource";
 
 const formSchema = z.object({
   name: z.string(),
@@ -33,7 +33,7 @@ const formSchema = z.object({
 type Inputs = z.infer<typeof formSchema>;
 
 export default function ExtraServiceForm() {
-  const { isAdding, add } = useExtraServices();
+  const { isCreating, handleCreate } = useResource("extra_services");
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const form = useForm<Inputs>({
@@ -50,8 +50,8 @@ export default function ExtraServiceForm() {
     setIsOpen((prev) => !prev);
   }
 
-  async function onSubmit(values: Inputs) {
-    await add(values);
+  function onSubmit(values: Inputs) {
+    handleCreate(values);
     onClose();
   }
 
@@ -108,8 +108,8 @@ export default function ExtraServiceForm() {
               </Button>
               <LoadingButton
                 type="submit"
-                loading={isAdding}
-                disabled={isAdding}
+                loading={isCreating}
+                disabled={isCreating}
                 className="w-full sm:w-auto"
               >
                 Add service

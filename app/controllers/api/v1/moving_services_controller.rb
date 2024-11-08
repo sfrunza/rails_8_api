@@ -39,7 +39,7 @@ class Api::V1::MovingServicesController < ApplicationController
 
   # POST /moving_services/bulk_update
   def bulk_update
-    @moving_services = params[:services]
+    @moving_services = params[:moving_services]
 
     @moving_services.each do |service|
       s = MovingService.find(service[:id])

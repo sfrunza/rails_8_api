@@ -40,7 +40,7 @@ class Api::V1::ExtraServicesController < ApplicationController
 
   # POST /extra_services/bulk_update
   def bulk_update
-    @extra_services = params[:services]
+    @extra_services = params[:extra_services]
 
     @extra_services.each do |service|
       s = ExtraService.find(service[:id])

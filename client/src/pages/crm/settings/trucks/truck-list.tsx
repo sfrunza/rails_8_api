@@ -1,18 +1,23 @@
-import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import { TruckIcon } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { TruckIcon } from "lucide-react";
 
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
-import useTrucks from '@/hooks/use-trucks';
-import LoadingButton from '@/components/loading-button';
-import { TTruck } from '@/types/trucks';
-import { Skeleton } from '@/components/ui/skeleton';
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import LoadingButton from "@/components/loading-button";
+import { TTruck } from "@/types/trucks";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useResource } from "@/hooks/use-resource";
 
 export default function TruckList() {
-  const { trucks, isUpdating, isLoading, error, updateTrucks } = useTrucks();
+  const {
+    data: trucks,
+    isLoading,
+    error,
+    isBulkUpdating,
+    handleBulkUpdate,
+  } = useResource("trucks");
   const [items, setItems] = useState<TTruck[]>([]);
   const [isTouched, setIsTouched] = useState<boolean>(false);
 
@@ -23,20 +28,8 @@ export default function TruckList() {
   }, [trucks]);
 
   async function handleSaveChanges() {
-    try {
-      await updateTrucks(items, {
-        onSuccess: () => {
-          toast.success('Changes saved successfully!');
-          setIsTouched(false);
-        },
-        onError: (error) => {
-          toast.error(error.message);
-          setItems(trucks!);
-        },
-      });
-    } catch (err) {
-      toast.error('An unexpected error occurred.');
-    }
+    await handleBulkUpdate({ trucks: items });
+    setIsTouched(false);
   }
 
   if (error) {
@@ -60,7 +53,7 @@ export default function TruckList() {
         {items?.map((truck, idx) => (
           <div
             key={truck.id}
-            className="flex font-medium items-center gap-6 md:gap-10"
+            className="flex items-center gap-6 font-medium md:gap-10"
           >
             <div className="flex min-w-fit items-center gap-4 text-sm text-muted-foreground">
               <TruckIcon className="size-5" />
@@ -77,7 +70,7 @@ export default function TruckList() {
                         ...item,
                         is_active: newPacking.is_active,
                       }
-                    : item
+                    : item,
                 );
                 setItems(newPackingList);
                 setIsTouched(true);
@@ -94,7 +87,7 @@ export default function TruckList() {
                         ...item,
                         name: newPacking.name,
                       }
-                    : item
+                    : item,
                 );
                 setItems(newPackingList);
                 setIsTouched(true);
@@ -105,9 +98,9 @@ export default function TruckList() {
       </div>
       <div className="border-t pt-4">
         <div
-          className={cn('flex transition-opacity duration-500 sm:justify-end', {
-            'invisible opacity-0': !isTouched,
-            'visible opacity-100': isTouched,
+          className={cn("flex transition-opacity duration-500 sm:justify-end", {
+            "invisible opacity-0": !isTouched,
+            "visible opacity-100": isTouched,
           })}
         >
           <div className="flex min-h-9 w-full gap-4 sm:w-auto">
@@ -125,8 +118,8 @@ export default function TruckList() {
             <LoadingButton
               type="button"
               className="w-full sm:w-auto"
-              disabled={isUpdating}
-              loading={isUpdating}
+              disabled={isBulkUpdating}
+              loading={isBulkUpdating}
               onClick={handleSaveChanges}
             >
               Save changes

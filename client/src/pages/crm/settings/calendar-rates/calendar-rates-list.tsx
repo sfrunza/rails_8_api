@@ -1,24 +1,20 @@
-import { useState } from 'react';
-import { format } from 'date-fns';
-import toast from 'react-hot-toast';
+import { useState } from "react";
+import { format } from "date-fns";
+import { useResource } from "@/hooks/use-resource";
+import useCalendarRates from "@/hooks/use-calendar-rates";
+import { hexToRgb } from "@/lib/helpers";
+import { TCalendarRate } from "@/types/rates";
 
-import { api } from '@/api';
-import useRates from '@/hooks/use-rates';
-import useCalendarRates from '@/hooks/use-calendar-rates';
-import { hexToRgb } from '@/lib/helpers';
-import { TCalendarRate } from '@/types/rates';
-
-import { CalendarWithRates } from '@/components/calendar-with-rates';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { CalendarWithRates } from "@/components/calendar-with-rates";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Skeleton } from '@/components/ui/skeleton';
+} from "@/components/ui/dialog";
 
 const getNextSixMonths = (): Date[] => {
   const months: Date[] = [];
@@ -28,7 +24,7 @@ const getNextSixMonths = (): Date[] => {
     const month = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth() + i,
-      1
+      1,
     ); // First day of each month
     months.push(month);
   }
@@ -38,50 +34,19 @@ const getNextSixMonths = (): Date[] => {
 
 export default function CalendarRatesList() {
   const months = getNextSixMonths();
-  const { mutate, isLoading } = useCalendarRates();
+  const { updateCalendarRate } = useCalendarRates();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedDateInfo, setSelectedDateInfo] = useState<TCalendarRate>();
 
   async function handleSaveRate(id: number, newRateId: number) {
-    const newData = {} as any;
-    if (newRateId === 0) {
-      newData['is_blocked'] = true;
-      newData['rate_id'] = null;
-    } else {
-      newData['rate_id'] = newRateId;
-      newData['is_blocked'] = false;
-    }
-
-    try {
-      await api.patch(`/calendar_rates/${id}`, {
-        calendar_rate: newData,
-      });
-
-      mutate();
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    }
+    await updateCalendarRate(id, newRateId);
   }
 
   function handleSelectDate(date: Date, rateData: TCalendarRate): void {
     setIsOpen(true);
     setSelectedDate(date);
     setSelectedDateInfo(rateData);
-  }
-
-  if (isLoading) {
-    return (
-      <div className="gap-4 grid lg:grid-cols-2">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="flex justify-center items-center">
-            <Skeleton className="h-[285px] w-[276px]" />
-          </div>
-        ))}
-      </div>
-    );
   }
 
   return (
@@ -126,7 +91,7 @@ function SelectRateDialog({
   selectedDateInfo: TCalendarRate | undefined;
   handleSaveRate: (id: number, newRateId: number) => void;
 }) {
-  const { dbRates } = useRates();
+  const { data: dbRates } = useResource("rates");
 
   if (!isOpen || !selectedDateInfo) return null;
 
@@ -138,12 +103,12 @@ function SelectRateDialog({
       <DialogContent className="max-w-xs">
         <DialogHeader>
           <DialogTitle>
-            {selectedDate && format(selectedDate, 'PPP')}
+            {selectedDate && format(selectedDate, "PPP")}
           </DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <RadioGroup
-          defaultValue={is_blocked ? '0' : selectedRateId.toString()}
+          defaultValue={is_blocked ? "0" : selectedRateId.toString()}
           onValueChange={(value) => {
             handleSaveRate(calendarDateId, parseInt(value));
           }}

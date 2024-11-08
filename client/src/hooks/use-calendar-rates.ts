@@ -1,22 +1,49 @@
-// import { debounce } from "@/lib/utils";
-// import { setRequest } from "@/slices/requestSlice";
-import { debounce } from "@/lib/helpers";
-// import { useAppDispatch } from "@/store";
-import { TCalendarRateData } from "@/types/rates";
+import useSWR, { useSWRConfig } from "swr";
 import { format } from "date-fns";
-import toast from "react-hot-toast";
-import useSWR from "swr";
+import { api } from "@/api";
+import { debounce } from "@/lib/helpers";
+import { TCalendarRate, TCalendarRateData } from "@/types/rates";
+import { useState } from "react";
+
+// Helper functions for API calls
+const fetchData = async (url: string): Promise<{}> => {
+  const response = await api.get(url);
+  return response.data;
+};
+
+const updateData = async (url: string, data: Partial<TCalendarRate>): Promise<TCalendarRate> => {
+  const response = await api.put(url, { calendar_rate: data });
+  return response.data;
+};
 
 export default function useCalendarRates() {
-  const { data, error, isLoading, mutate } = useSWR<TCalendarRateData | null | undefined>("/calendar_rates", null, {
-    onError: () => {
-      if (!navigator.onLine) {
-        toast.error(
-          "You are offline. Please check your internet connection.",
-        );
-      }
-    },
-  });
+  const endpoint = "calendar_rates";
+  const { mutate } = useSWRConfig()
+  const { data, error, isLoading } = useSWR<TCalendarRateData>(endpoint, fetchData);
+
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
+
+
+  const updateCalendarRate = async (id: number, newRateId: number) => {
+    setIsUpdating(true);
+    const newData: Partial<TCalendarRate> = {}
+    if (newRateId === 0) {
+      newData["is_blocked"] = true;
+      newData["rate_id"] = null;
+    } else {
+      newData["rate_id"] = newRateId;
+      newData["is_blocked"] = false;
+    }
+
+    try {
+      await updateData(`${endpoint}/${id}`, newData);
+      mutate(endpoint);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   const updateRate = debounce(
     (movingDate: Date | undefined, crewSize: number, rate: number) => {
@@ -45,5 +72,5 @@ export default function useCalendarRates() {
     1000,
   );
 
-  return { calendarRates: data, error, isLoading, mutate, updateRate };
+  return { calendarRates: data, error, isLoading, isUpdating, updateCalendarRate, updateRate };
 }

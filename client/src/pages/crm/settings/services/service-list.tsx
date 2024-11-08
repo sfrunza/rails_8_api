@@ -22,14 +22,19 @@ import {
 import { cn } from "@/lib/utils";
 import LoadingButton from "@/components/loading-button";
 import { Button } from "@/components/ui/button";
-import useMovingServices from "@/hooks/use-moving-service";
 import { TMovingService } from "@/types/moving-service";
 import ServiceItem from "./service-item";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useResource } from "@/hooks/use-resource";
 
 export default function ServiceList() {
-  const { movingServices, isLoading, error, update, isUpdating } =
-    useMovingServices();
+  const {
+    data: movingServices,
+    isLoading,
+    isBulkUpdating,
+    error,
+    handleBulkUpdate,
+  } = useResource("moving_services");
 
   const [items, setItems] = useState<TMovingService[]>([]);
   const [orderChanged, setOrderChanged] = useState<boolean>(false);
@@ -135,10 +140,10 @@ export default function ServiceList() {
             <LoadingButton
               type="button"
               className="w-full sm:w-auto"
-              disabled={isUpdating}
-              loading={isUpdating}
-              onClick={async () => {
-                await update(items);
+              disabled={isBulkUpdating}
+              loading={isBulkUpdating}
+              onClick={() => {
+                handleBulkUpdate({ moving_services: items });
                 setOrderChanged(false);
               }}
             >

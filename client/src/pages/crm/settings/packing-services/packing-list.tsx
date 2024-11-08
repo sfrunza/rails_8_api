@@ -26,12 +26,17 @@ import LoadingButton from "@/components/loading-button";
 import { Button } from "@/components/ui/button";
 import PackingItem from "./packing-item";
 import { Skeleton } from "@/components/ui/skeleton";
-import usePackingServices from "@/hooks/use-packing";
 import { TPackingService } from "@/types/packing";
+import { useResource } from "@/hooks/use-resource";
 
 export default function PackingList() {
-  const { packingServices, isLoading, error, bulkUpdate, isUpdating } =
-    usePackingServices();
+  const {
+    data: packingServices,
+    isLoading,
+    error,
+    handleBulkUpdate,
+    isBulkUpdating,
+  } = useResource("packing_services");
   const [items, setItems] = useState<TPackingService[]>([]);
   const [orderChanged, setOrderChanged] = useState<boolean>(false);
   const sensors = useSensors(
@@ -122,10 +127,11 @@ export default function PackingList() {
             <LoadingButton
               type="button"
               className="w-full sm:w-auto"
-              disabled={isUpdating}
-              loading={isUpdating}
-              onClick={async () => {
-                await bulkUpdate(items);
+              disabled={isBulkUpdating}
+              loading={isBulkUpdating}
+              onClick={() => {
+                // await bulkUpdate(items);
+                handleBulkUpdate({ packing_services: items });
                 setOrderChanged(false);
               }}
             >

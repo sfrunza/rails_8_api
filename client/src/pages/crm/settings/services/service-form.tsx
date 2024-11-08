@@ -3,10 +3,16 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import LoadingButton from "@/components/loading-button";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useMovingServices from "@/hooks/use-moving-service";
+import { useResource } from "@/hooks/use-resource";
 
 const formSchema = z.object({
   name: z
@@ -17,7 +23,7 @@ const formSchema = z.object({
 type Inputs = z.infer<typeof formSchema>;
 
 export default function ServiceForm() {
-  const { isAdding, add } = useMovingServices();
+  const { isCreating, handleCreate } = useResource("moving_services");
 
   const form = useForm<Inputs>({
     resolver: zodResolver(formSchema),
@@ -27,8 +33,8 @@ export default function ServiceForm() {
     },
   });
 
-  async function onSubmit(values: Inputs) {
-    await add(values);
+  function onSubmit(values: Inputs) {
+    handleCreate(values);
     form.reset();
   }
 
@@ -48,14 +54,14 @@ export default function ServiceForm() {
                   <Input
                     {...field}
                     placeholder="Service name"
-                    className="w-full"
                     autoComplete="off"
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
-          <LoadingButton loading={isAdding} disabled={isAdding}>
+          <LoadingButton loading={isCreating} disabled={isCreating}>
             <span className="flex items-center space-x-2">
               <PlusIcon className="flex size-5" />
               <span className="hidden lg:block">Add Service</span>

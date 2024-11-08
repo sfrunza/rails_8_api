@@ -39,7 +39,7 @@ class Api::V1::PackingServicesController < ApplicationController
 
   # POST /packing_services/bulk_update
   def bulk_update
-    @packing_services = params[:packings]
+    @packing_services = params[:packing_services]
 
     @packing_services.each do |packing|
       p = PackingService.find(packing[:id])

@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import useExtraServices from "@/hooks/use-extra-service";
 import { cn } from "@/lib/utils";
 import { TExtraService } from "@/types/extra-service";
 import {
@@ -28,10 +27,17 @@ import {
 import { useEffect, useState } from "react";
 import ExtraServiceItem from "./extra-service-item";
 import ExtraServiceForm from "./extra-service-form";
+import { useResource } from "@/hooks/use-resource";
 
 export default function ExtraServiceList() {
-  const { extraServices, isLoading, error, update, isUpdating } =
-    useExtraServices();
+  const {
+    data: extraServices,
+    isLoading,
+    isBulkUpdating,
+    error,
+    handleBulkUpdate,
+  } = useResource("extra_services");
+
   const [items, setItems] = useState<TExtraService[]>([]);
   const [orderChanged, setOrderChanged] = useState<boolean>(false);
 
@@ -147,10 +153,10 @@ export default function ExtraServiceList() {
             <LoadingButton
               type="button"
               className="w-full sm:w-auto"
-              disabled={isUpdating}
-              loading={isUpdating}
-              onClick={async () => {
-                await update(items);
+              disabled={isBulkUpdating}
+              loading={isBulkUpdating}
+              onClick={() => {
+                handleBulkUpdate({ extra_services: items });
                 setOrderChanged(false);
               }}
             >
