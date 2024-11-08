@@ -5,7 +5,7 @@ ruby "3.3.0"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.0.0"
 # Use postgresql as the database for Active Record
-gem "pg", "~> 1.1"
+gem "pg", "~> 1.5"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
@@ -39,7 +39,7 @@ gem "rack-cors"
 
 gem "email_validator", require: "email_validator/strict"
 
-gem "jwt", "~> 1.5", ">= 1.5.4"
+gem "jwt", "~> 2.9"
 
 gem "active_model_serializers", "~> 0.10.14"
 
