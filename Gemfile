@@ -41,7 +41,7 @@ gem "email_validator", require: "email_validator/strict"
 
 gem "jwt", "~> 2.9"
 
-gem "active_model_serializers", "~> 0.10.14"
+gem "active_model_serializers", "~> 0.10.15"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
