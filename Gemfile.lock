@@ -115,7 +115,7 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jsonapi-renderer (0.2.2)
-    jwt (2.9.3)
+    jwt (2.10.0)
       base64
     language_server-protocol (3.17.0.3)
     logger (1.6.1)
@@ -265,7 +265,7 @@ DEPENDENCIES
   debug
   email_validator
   fast_jsonapi (~> 1.5)
-  jwt (~> 2.9)
+  jwt (~> 2.10)
   pg (~> 1.5)
   puma (>= 5.0)
   rack-cors
