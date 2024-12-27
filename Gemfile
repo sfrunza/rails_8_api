@@ -39,7 +39,7 @@ gem "rack-cors"
 
 gem "email_validator", require: "email_validator/strict"
 
-gem "jwt", "~> 2.9"
+gem "jwt", "~> 2.10"
 
 gem "active_model_serializers", "~> 0.10.14"
 
