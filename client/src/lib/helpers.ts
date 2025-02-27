@@ -100,8 +100,8 @@ export function priceObjectToString(
 
 
 export function timeWindowToString(
-  start_time_window?: number,
-  end_time_window?: number
+  start_time_window?: number | null,
+  end_time_window?: number | null
 ): string {
   // If neither start nor end times are provided, return "TBD"
   if (!start_time_window && !end_time_window) {

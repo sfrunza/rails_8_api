@@ -5,10 +5,18 @@ import {
 } from "react-redux";
 
 import authReducer from "@/slices/auth-slice";
+import requestsReducer from "@/slices/requests-slice";
+import requestReducer from "@/slices/request-slice";
+import modalReducer from "@/slices/modal-slice";
+import parklotReducer from "@/slices/parklot-slice";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    requests: requestsReducer,
+    request: requestReducer,
+    modal: modalReducer,
+    parklot: parklotReducer,
   },
   // middleware: (getDefaultMiddleware) =>
   //   getDefaultMiddleware().concat(requestsApi.middleware),

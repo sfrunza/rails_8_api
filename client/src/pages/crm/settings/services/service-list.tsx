@@ -20,9 +20,9 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { cn } from "@/lib/utils";
-import LoadingButton from "@/components/loading-button";
+import { LoadingButton } from "@/components/loading-button";
 import { Button } from "@/components/ui/button";
-import { TMovingService } from "@/types/moving-service";
+import { TService } from "@/types/service";
 import ServiceItem from "./service-item";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useResource } from "@/hooks/use-resource";
@@ -34,9 +34,9 @@ export default function ServiceList() {
     isBulkUpdating,
     error,
     handleBulkUpdate,
-  } = useResource("moving_services");
+  } = useResource("services");
 
-  const [items, setItems] = useState<TMovingService[]>([]);
+  const [items, setItems] = useState<TService[]>([]);
   const [orderChanged, setOrderChanged] = useState<boolean>(false);
 
   const sensors = useSensors(
@@ -68,7 +68,7 @@ export default function ServiceList() {
   }
 
   function onEnabledChange(itemId: number, value: boolean) {
-    setItems((prev: TMovingService[]) => {
+    setItems((prev: TService[]) => {
       return prev.map((item) =>
         item.id === itemId ? { ...item, enabled: value } : item,
       );
@@ -143,7 +143,7 @@ export default function ServiceList() {
               disabled={isBulkUpdating}
               loading={isBulkUpdating}
               onClick={() => {
-                handleBulkUpdate({ moving_services: items });
+                handleBulkUpdate({ services: items });
                 setOrderChanged(false);
               }}
             >

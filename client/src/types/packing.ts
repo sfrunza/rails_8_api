@@ -1,8 +1,8 @@
-export type TPackingService = {
+export type TPacking = {
   id: number;
   name: string;
   description: string;
-  labor_increase: number;
   is_default: boolean;
+  labor_increase: number;
   index: number;
 }

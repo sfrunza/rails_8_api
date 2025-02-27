@@ -1,31 +1,31 @@
-import { PanelLeftIcon } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { PanelLeftIcon } from "lucide-react";
+import { NavLink } from "react-router";
 
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet';
+} from "@/components/ui/sheet";
 
-import { navLinks } from './navLinks';
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
+import { useState } from "react";
+import { navLinks } from "./navLinks";
 
 export function MobileMenu() {
-  const { pathname } = useLocation();
+  const [open, setOpen] = useState<boolean>(false);
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild className="flex lg:hidden">
         <Button
           variant="outline"
           size="icon"
-          className="border-none bg-transparent p-0 shadow-none hover:bg-muted/10"
+          className="border-none bg-transparent p-0 shadow-none hover:bg-muted/10 [&_svg]:size-5"
         >
-          <PanelLeftIcon className="h-5 w-5 rounded-md text-white" />
+          <PanelLeftIcon className="rounded-md text-white" />
           <span className="sr-only">Open Sidebar</span>
         </Button>
       </SheetTrigger>
@@ -35,27 +35,27 @@ export function MobileMenu() {
           <SheetDescription>Navigation links</SheetDescription>
         </SheetHeader>
         <div>
-          <ul role="list" className="flex flex-col items-start space-y-2 mt-8">
+          <ul role="list" className="mt-8 flex flex-col items-start space-y-2">
             {navLinks.map((item, i) => {
-              const isCurrentPage = pathname.includes(item.href);
-
               return (
                 <li key={i} className="w-full">
-                  <SheetClose asChild>
-                    <Button
-                      asChild
-                      variant={isCurrentPage ? 'secondary' : 'ghost'}
-                      size="lg"
-                      className={cn('justify-start w-full', {
-                        'shadow-button': isCurrentPage,
-                      })}
-                    >
-                      <Link to={item.href}>
-                        <item.icon className="mr-2 size-5" aria-hidden="true" />
-                        <span>{item.name}</span>
-                      </Link>
-                    </Button>
-                  </SheetClose>
+                  <NavLink
+                    to={item.href}
+                    viewTransition
+                    className={({ isActive }) =>
+                      cn(
+                        buttonVariants({
+                          variant: isActive ? "secondary" : "ghost",
+                          size: "lg",
+                          className: "h-12 w-full justify-start",
+                        }),
+                      )
+                    }
+                    onClick={() => setOpen(false)}
+                  >
+                    <item.icon />
+                    <span>{item.name}</span>
+                  </NavLink>
                 </li>
               );
             })}

@@ -7,7 +7,7 @@ import { GripVerticalIcon, TrashIcon } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { useResource } from "@/hooks/use-resource";
-import LoadingButton from "@/components/loading-button";
+import { LoadingButton } from "@/components/loading-button";
 
 export default function ServiceItem({
   id,
@@ -18,7 +18,7 @@ export default function ServiceItem({
   item: any;
   onEnabledChange: (index: number, value: boolean) => void;
 }) {
-  const { handleDelete, isDeleting } = useResource("moving_services");
+  const { handleDelete, isDeleting } = useResource("services");
   const {
     attributes,
     listeners,
@@ -71,7 +71,7 @@ export default function ServiceItem({
             className="transition-colors hover:text-red-600"
             onClick={() => handleDelete(item.id)}
           >
-            <TrashIcon className="size-4" />
+            <TrashIcon />
           </LoadingButton>
         </div>
       )}

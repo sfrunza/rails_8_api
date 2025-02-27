@@ -8,13 +8,27 @@ Rails.application.routes.draw do
     namespace :v1 do
       post "/auth/login", to: "sessions#create"
       get "/auth/verify", to: "sessions#show"
+
       resources :users do
         patch "update_password", on: :member
         get "check_email", on: :collection
-        # get "requests", to: "client_requests#index", on: :member
       end
 
-      resources :moving_services do
+      resources :requests do
+        post "pair", on: :member
+        get "status_counts", on: :collection
+        get "requests_by_date", on: :collection
+        get "dates_with_requests", on: :collection
+        resources :messages, only: %i[index create]
+      end
+
+      resources :requests_messages, only: %i[index]
+
+      resources :search, only: %i[index]
+
+      resources :notifications, only: %i[index]
+
+      resources :services do
         post "bulk_update", on: :collection
       end
 
@@ -30,14 +44,12 @@ Rails.application.routes.draw do
         post "bulk_update", on: :collection
       end
 
-      resources :packing_services do
+      resources :packings do
         post "bulk_update", on: :collection
       end
 
       resources :calendar_rates, only: %i[index create update]
       get "/calendar_rates/:date", to: "calendar_rates#show", as: "show"
-
-      resources :posts
     end
   end
 

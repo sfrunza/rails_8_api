@@ -41,7 +41,9 @@ gem "email_validator", require: "email_validator/strict"
 
 gem "jwt", "~> 2.9"
 
-gem "active_model_serializers", "~> 0.10.14"
+# gem "active_model_serializers", "~> 0.10.14"
+
+gem "jsonapi-serializer"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -52,8 +54,7 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   # gem "rubocop-rails-omakase", require: false
+  gem "dotenv-rails"
   gem "ruby-lsp", require: false
   gem "syntax_tree", "~> 6.2", require: false
 end
-
-gem "fast_jsonapi", "~> 1.5"

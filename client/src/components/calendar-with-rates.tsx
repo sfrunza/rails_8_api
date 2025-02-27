@@ -11,7 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { TCalendarRate } from "@/types/rates";
+import { TCalendarRate } from "@/types/rate";
 import { useResource } from "@/hooks/use-resource";
 import { Skeleton } from "./ui/skeleton";
 import useCalendarRates from "@/hooks/use-calendar-rates";
@@ -42,7 +42,7 @@ function CalendarWithRates({
   elevenMonthsAhead.setMonth(today.getMonth() + 11);
 
   return (
-    <div className="overflow-hidden rounded-md shadow">
+    <>
       <DayPicker
         month={selectedMonth}
         onMonthChange={setSelectedMonth}
@@ -64,7 +64,7 @@ function CalendarWithRates({
           nav_button_previous: "absolute left-1",
           nav_button_next: "absolute right-1",
           table: "w-full border-collapse space-y-1",
-          head_row: "flex justify-around",
+          head_row: "flex",
           head_cell:
             "text-muted-foreground rounded-md w-8 font-normal text-[0.8rem]",
           row: "flex w-full mt-2",
@@ -84,7 +84,7 @@ function CalendarWithRates({
             "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
           day_today: "bg-accent text-accent-foreground",
           day_outside:
-            "day-outside text-muted-foreground opacity-50  aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30",
+            "day-outside text-muted-foreground aria-selected:bg-accent/50 aria-selected:text-muted-foreground",
           day_disabled: "text-muted-foreground opacity-50",
           day_range_middle:
             "aria-selected:bg-accent aria-selected:text-accent-foreground",
@@ -98,7 +98,7 @@ function CalendarWithRates({
             const { date } = props;
 
             if (!calendarRates) {
-              return <Skeleton className="mx-0.5 h-8 w-8 p-0" />;
+              return <Skeleton className="h-8 w-8 p-0" />;
             }
 
             const isSameMonth = date.getMonth() === selectedMonth.getMonth();
@@ -133,7 +133,7 @@ function CalendarWithRates({
               <button
                 className={cn(
                   buttonVariants({ variant: "ghost" }),
-                  "mx-0.5 h-8 w-8 cursor-pointer p-0 font-medium hover:border aria-selected:opacity-100",
+                  "h-8 w-8 p-0 font-semibold aria-selected:opacity-100",
                 )}
                 disabled={!isSameMonth}
                 style={styles}
@@ -149,7 +149,7 @@ function CalendarWithRates({
         {...props}
       />
       {showFooter && <CalendarFooter />}
-    </div>
+    </>
   );
 }
 CalendarWithRates.displayName = "CalendarWithRates";
@@ -159,7 +159,7 @@ export { CalendarWithRates };
 function CalendarFooter() {
   const { data: dbRates } = useResource("rates");
   return (
-    <div className="max-w-[276px] border-t bg-muted">
+    <div className="max-w-[248px] border-t bg-muted">
       <div className="flex w-full flex-wrap items-center justify-center gap-2 px-6 py-4 text-xs font-semibold">
         {dbRates?.map((rate, i) => {
           return (

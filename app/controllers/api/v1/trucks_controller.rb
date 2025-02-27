@@ -4,19 +4,18 @@ class Api::V1::TrucksController < ApplicationController
 
   # GET /trucks
   def index
-    trucks = Truck.all.order(:id)
+    is_active = params[:is_active]
+
+    if is_active
+      trucks = Truck.where(is_active: is_active).order(:id)
+    else
+      trucks = Truck.all.order(:id)
+    end
+
     serialized_data = TruckSerializer.new(trucks).serializable_hash[:data]
     response_data = serialized_data.map { |s| s[:attributes] }
 
     render json: response_data
-
-    # if serialized_data.empty?
-    #   render(plain: "[]")
-    # else
-    #   response_data = serialized_data.map { |s| s[:attributes] }
-
-    #   render json: response_data
-    # end
   end
 
   # GET /trucks/1
@@ -66,12 +65,10 @@ class Api::V1::TrucksController < ApplicationController
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_truck
     @truck = Truck.find(params.expect(:id))
   end
 
-  # Only allow a list of trusted parameters through.
   def truck_params
     params.expect(truck: %i[name is_active])
   end

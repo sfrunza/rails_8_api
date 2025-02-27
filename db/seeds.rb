@@ -11,10 +11,10 @@
 puts "Deleting old records..."
 
 User.delete_all
-MovingService.delete_all
+Service.delete_all
 Rate.delete_all
 Truck.delete_all
-PackingService.delete_all
+Packing.delete_all
 
 User.create!(
   first_name: "Aurel",
@@ -31,7 +31,7 @@ User.create!(
   password: "111111"
 )
 
-MovingService.create!(
+Service.create!(
   name: "Local move",
   enabled: true,
   miles_setting: 150,
@@ -39,7 +39,7 @@ MovingService.create!(
   is_default: true
 )
 
-MovingService.create!(
+Service.create!(
   name: "Flat Rate",
   enabled: true,
   miles_setting: 150,
@@ -47,7 +47,7 @@ MovingService.create!(
   is_default: true
 )
 
-MovingService.create!(
+Service.create!(
   name: "Loading help",
   enabled: true,
   miles_setting: 0,
@@ -55,7 +55,7 @@ MovingService.create!(
   is_default: true
 )
 
-MovingService.create!(
+Service.create!(
   name: "Unloading help",
   enabled: true,
   miles_setting: 0,
@@ -63,7 +63,7 @@ MovingService.create!(
   is_default: true
 )
 
-MovingService.create!(
+Service.create!(
   name: "Inside move",
   enabled: true,
   miles_setting: 0,
@@ -71,7 +71,7 @@ MovingService.create!(
   is_default: true
 )
 
-MovingService.create!(
+Service.create!(
   name: "Packing only",
   enabled: true,
   miles_setting: 0,
@@ -79,7 +79,7 @@ MovingService.create!(
   is_default: true
 )
 
-MovingService.create!(
+Service.create!(
   name: "Moving & Storage",
   enabled: true,
   miles_setting: 0,
@@ -87,7 +87,7 @@ MovingService.create!(
   is_default: true
 )
 
-MovingService.create!(
+Service.create!(
   name: "Overnight truck Storage",
   enabled: true,
   miles_setting: 0,
@@ -104,27 +104,27 @@ Rate.create(name: "High Peak", color: "#000000", enable: true)
 Truck.create(name: "18 FT")
 Truck.create(name: "20 FT")
 
-PackingService.create(
+Packing.create(
   name: "I will pack by myself",
   description: "This is some description.",
   is_default: true,
-  labor_increse: 0,
+  labor_increase: 0,
   index: 0
 )
 
-PackingService.create(
+Packing.create(
   name: "I need Partial Packing Help",
   description: "This is some description.",
   is_default: false,
-  labor_increse: 25,
+  labor_increase: 25,
   index: 1
 )
 
-PackingService.create(
+Packing.create(
   name: "I need Full Packing Service",
   description: "This is some description.",
   is_default: false,
-  labor_increse: 50,
+  labor_increase: 50,
   index: 2
 )
 

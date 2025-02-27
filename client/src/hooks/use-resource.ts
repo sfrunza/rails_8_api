@@ -1,29 +1,26 @@
 import useSWR, { useSWRConfig } from 'swr';
 import { api } from '@/api';
-import { TMovingService } from '@/types/moving-service';
+import { TService } from '@/types/service';
 import { TExtraService } from '@/types/extra-service';
-import { TPackingService } from '@/types/packing';
+import { TPacking } from '@/types/packing';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
-import { TTruck } from '@/types/trucks';
-import { TRate } from '@/types/rates';
+import { TTruck } from '@/types/truck';
+import { TRate } from '@/types/rate';
+import { AxiosError } from 'axios';
 
-type Endpoint = 'moving_services' | 'extra_services' | 'packing_services' | 'trucks' | 'rates'
+type Endpoint = 'services' | 'extra_services' | 'packings' | 'trucks' | 'rates'
 
 type EndpointToType = {
-  moving_services: TMovingService;
+  services: TService;
   extra_services: TExtraService;
-  packing_services: TPackingService;
+  packings: TPacking;
   trucks: TTruck;
   rates: TRate;
 };
 
 
 // Helper functions for API calls
-const fetchData = async <T>(url: string): Promise<T[]> => {
-  const response = await api.get(url);
-  return response.data;
-};
 
 const updateData = async <T>(url: string, data: Partial<T>): Promise<T> => {
   const response = await api.put(url, data);
@@ -48,11 +45,12 @@ const createData = async <T>(url: string, data: Partial<T>): Promise<T> => {
 // Reusable hook with generic type
 export const useResource = <T extends Endpoint>(endpoint: T) => {
   const { mutate } = useSWRConfig()
-  const { data, error, isLoading } = useSWR<EndpointToType[T][]>(endpoint, fetchData);
+  const { data, error, isLoading } = useSWR<EndpointToType[T][], AxiosError>(endpoint);
   const [isCreating, setIsCreating] = useState<boolean>(false);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const [isBulkUpdating, setIsBulkUpdating] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+
 
 
 

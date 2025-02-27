@@ -1,8 +1,7 @@
-import { PlusIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import LoadingButton from "@/components/loading-button";
+import { LoadingButton } from "@/components/loading-button";
 import {
   Form,
   FormControl,
@@ -23,11 +22,11 @@ const formSchema = z.object({
 type Inputs = z.infer<typeof formSchema>;
 
 export default function ServiceForm() {
-  const { isCreating, handleCreate } = useResource("moving_services");
+  const { isCreating, handleCreate } = useResource("services");
 
   const form = useForm<Inputs>({
     resolver: zodResolver(formSchema),
-    reValidateMode: "onSubmit",
+    reValidateMode: "onChange",
     defaultValues: {
       name: "",
     },
@@ -43,7 +42,7 @@ export default function ServiceForm() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="mb-4 flex items-center gap-4"
+          className="mb-4 flex gap-2"
         >
           <FormField
             control={form.control}
@@ -62,10 +61,7 @@ export default function ServiceForm() {
             )}
           />
           <LoadingButton loading={isCreating} disabled={isCreating}>
-            <span className="flex items-center space-x-2">
-              <PlusIcon className="flex size-5" />
-              <span className="hidden lg:block">Add Service</span>
-            </span>
+            Add service
           </LoadingButton>
         </form>
       </Form>

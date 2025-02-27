@@ -1,0 +1,83 @@
+{
+  "javascript.format.enable": false,
+  "prettier.singleQuote": true,
+
+  "workbench.colorTheme": "Monokai",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "workbench.startupEditor": "none",
+  "workbench.iconTheme": "vscode-great-icons",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "workbench.editorAssociations": {
+    "*.html": "default"
+  },
+  "eslint.options": {
+    "ignorePattern": ["!src/*"]
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "emmet.showSuggestionsAsSnippets": true,
+  "emmet.includeLanguages": {
+    "html.erb": "html",
+    "erb": "html"
+  },
+  "[erb]": {
+    "editor.defaultFormatter": "aliariff.vscode-erb-beautify",
+    "editor.formatOnSave": true
+  },
+
+  "files.associations": {
+    "*.html.erb": "html",
+    "*.css": "tailwindcss"
+  },
+  "editor.formatOnSaveMode": "file",
+  "editor.formatOnType": true,
+  "git.ignoreRebaseWarning": true,
+  "rubyLsp.rubyVersionManager": {
+    "identifier": "rvm"
+  },
+  "rubyLsp.formatter": "auto",
+  "rubyLsp.enabledFeatures": {
+    "inlayHint": false
+  },
+  "[ruby]": {
+    "editor.defaultFormatter": "Shopify.ruby-lsp", // Use the Ruby LSP as the default formatter
+    "editor.formatOnSave": true, // Format files automatically when saving
+    "editor.tabSize": 2, // Use 2 spaces for indentation
+    "editor.insertSpaces": true, // Use spaces and not tabs for indentantion
+    "editor.semanticHighlighting.enabled": true, // Enable semantic highlighting
+    "editor.formatOnType": true // Enable formatting while typing
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.tabSize": 2,
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "javascript.updateImportsOnFileMove.enabled": "never",
+  "github.copilot.editor.enableAutoCompletions": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "files.autoSave": "onFocusChange"
+}

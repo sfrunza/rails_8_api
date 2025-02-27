@@ -38,12 +38,11 @@ function createAxiosResponse() {
 
 // export const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
-export const fetcher = (url: string) =>
+export const fetcher = <T>(url: string): Promise<T[]> =>
   createAxiosResponse()!
     .get(url)
-    .then((res) => {
+    .then(async (res) => {
       // await new Promise((resolve) => setTimeout(resolve, 2000));
       return res.data;
     });
-
 

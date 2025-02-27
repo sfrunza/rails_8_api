@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 
-import LoadingButton from "@/components/loading-button";
+import { LoadingButton } from "@/components/loading-button";
 import PriceInput from "@/components/price-input";
 import SettingPageWrapper from "@/components/setting-page-wrapper";
 import { Input } from "@/components/ui/input";
@@ -22,7 +22,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useResource } from "@/hooks/use-resource";
 import { formatMoney, hexToRgb } from "@/lib/helpers";
 import { cn } from "@/lib/utils";
-import { TRate } from "@/types/rates";
+import { TRate } from "@/types/rate";
 
 const tableGrid =
   "grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_1fr_1fr] items-center gap-4 px-1 text-sm font-medium";
@@ -185,7 +185,7 @@ export default function RatesPage() {
                       setCurrentEdit((prev) => (prev === idx ? null : idx));
                     }}
                   >
-                    <SquarePenIcon className="size-4" />
+                    <SquarePenIcon />
                     Edit
                   </Button>
                 </div>

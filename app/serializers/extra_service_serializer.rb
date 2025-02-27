@@ -1,5 +1,5 @@
 class ExtraServiceSerializer
-  include FastJsonapi::ObjectSerializer
+  include JSONAPI::Serializer
 
   attributes :id, :name, :price, :enabled, :index
 end

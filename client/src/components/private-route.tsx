@@ -1,5 +1,5 @@
-import { useAppSelector } from '@/store';
-import { Navigate } from 'react-router-dom';
+import { useAppSelector } from "@/store";
+import { Navigate } from "react-router";
 
 export default function PrivateRoute({
   allowedRoles,

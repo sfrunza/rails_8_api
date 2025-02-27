@@ -7,9 +7,27 @@ class User < ApplicationRecord
   validates :last_name, presence: true
   validates :email, presence: true, email: true
   validates_uniqueness_of :email
-  # validates :role, presence: true, inclusion: { in: roles.keys }
-
-  # Validate presence and inclusion of role
-
   normalizes :email, with: ->(e) { e.strip.downcase }
+
+  has_many :requests, foreign_key: "customer_id"
+  has_many :messages, dependent: :destroy
+
+  after_update_commit :broadcast_updated_customer
+
+  def broadcast_updated_customer
+    customer_data =
+      slice(
+        :id,
+        :first_name,
+        :last_name,
+        :email,
+        :phone,
+        :add_email,
+        :add_phone,
+        :role
+      )
+    requests.find_each do |request|
+      RequestChannel.broadcast_to(request, { customer: customer_data })
+    end
+  end
 end

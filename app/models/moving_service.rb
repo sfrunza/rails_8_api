@@ -1,2 +1,0 @@
-class MovingService < ApplicationRecord
-end

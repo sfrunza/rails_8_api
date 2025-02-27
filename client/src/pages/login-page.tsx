@@ -22,9 +22,9 @@ import { setCredentials } from "@/slices/auth-slice";
 import { useAppDispatch } from "@/store";
 import { AxiosError } from "axios";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
 import { useState } from "react";
-import LoadingButton from "@/components/loading-button";
+import { LoadingButton } from "@/components/loading-button";
 
 const formSchema = z.object({
   email: z.string().email(),

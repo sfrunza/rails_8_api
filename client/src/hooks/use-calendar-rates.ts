@@ -2,14 +2,11 @@ import useSWR, { useSWRConfig } from "swr";
 import { format } from "date-fns";
 import { api } from "@/api";
 import { debounce } from "@/lib/helpers";
-import { TCalendarRate, TCalendarRateData } from "@/types/rates";
+import { TCalendarRate, TCalendarRateData } from "@/types/rate";
 import { useState } from "react";
+import { updateField } from "@/slices/request-slice";
+import { useAppDispatch } from "@/store";
 
-// Helper functions for API calls
-const fetchData = async (url: string): Promise<{}> => {
-  const response = await api.get(url);
-  return response.data;
-};
 
 const updateData = async (url: string, data: Partial<TCalendarRate>): Promise<TCalendarRate> => {
   const response = await api.put(url, { calendar_rate: data });
@@ -18,8 +15,9 @@ const updateData = async (url: string, data: Partial<TCalendarRate>): Promise<TC
 
 export default function useCalendarRates() {
   const endpoint = "calendar_rates";
+  const dispatch = useAppDispatch();
   const { mutate } = useSWRConfig()
-  const { data, error, isLoading } = useSWR<TCalendarRateData>(endpoint, fetchData);
+  const { data, error, isLoading } = useSWR<TCalendarRateData>(endpoint);
 
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
@@ -46,13 +44,15 @@ export default function useCalendarRates() {
   };
 
   const updateRate = debounce(
-    (movingDate: Date | undefined, crewSize: number, rate: number) => {
+    (movingDate: string | null, crewSize: number, rate: number) => {
       if (!data || !movingDate) return;
 
       if (movingDate && crewSize > 1) {
         const dayRate = data[format(movingDate, "MM-dd-yyyy")];
         let newRate = rate;
         let newHourlyRate = dayRate.rate.movers_rates[crewSize]?.hourly_rate;
+
+        console.log(dayRate);
 
         if (newHourlyRate) {
           if (crewSize > 4) {
@@ -66,7 +66,7 @@ export default function useCalendarRates() {
 
         console.log(newRate);
 
-        // dispatch(setRequest({ rate: newRate }));
+        dispatch(updateField({ rate: newRate }));
       }
     },
     1000,

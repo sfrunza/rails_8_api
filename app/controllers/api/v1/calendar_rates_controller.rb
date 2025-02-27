@@ -7,6 +7,14 @@ class Api::V1::CalendarRatesController < ApplicationController
     calendar_rates =
       CalendarRate
         .includes(:rate)
+        .select(
+          :id,
+          :date,
+          :rate_id,
+          :enable_automation,
+          :enable_auto_booking,
+          :is_blocked
+        )
         .where(
           date: Date.today.beginning_of_month..11.months.from_now.end_of_month
         )
@@ -23,11 +31,6 @@ class Api::V1::CalendarRatesController < ApplicationController
 
     render json: response_data
   end
-
-  # GET /calendar_rates/1
-  # def show
-  #   render json: @calendar_rate
-  # end
 
   # POST /calendar_rates
   def create

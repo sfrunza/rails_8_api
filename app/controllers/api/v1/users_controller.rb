@@ -63,8 +63,18 @@ class Api::V1::UsersController < ApplicationController
     @user = User.find(params.expect(:id))
   end
 
-  # Only allow a list of trusted parameters through.
   def user_params
-    params.expect(user: %i[first_name last_name email phone role password])
+    params.expect(
+      user: %i[
+        first_name
+        last_name
+        email
+        add_email
+        phone
+        add_phone
+        role
+        password
+      ]
+    )
   end
 end

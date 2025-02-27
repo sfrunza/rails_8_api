@@ -4,83 +4,89 @@ import {
   HousePlusIcon,
   Package2Icon,
   PencilRulerIcon,
-} from 'lucide-react';
-import { TruckIcon } from 'lucide-react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+} from "lucide-react";
+import { TruckIcon } from "lucide-react";
+import { NavLink, Outlet, useLocation } from "react-router";
 
-import { cn } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
-import PageContainer from '@/components/page-container';
-
-// import { sidebarMenuButtonVariants } from '@/components/ui/sidebar';
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
+import PageContainer from "@/components/page-container";
+// import { preload } from "swr";
 
 export const navLinks = [
   {
-    name: 'Moving Services',
-    href: 'services',
+    name: "Moving Services",
+    href: "services",
     icon: PencilRulerIcon,
+    prefetchUrl: "/services",
   },
   {
-    name: 'Extra Services',
-    href: 'extra-services',
+    name: "Extra Services",
+    href: "extra-services",
     icon: HousePlusIcon,
+    prefetchUrl: "/extra_services",
   },
   {
-    name: 'Packing',
-    href: 'packing',
+    name: "Packing",
+    href: "packing",
     icon: Package2Icon,
+    prefetchUrl: "/packings",
   },
-  { name: 'Trucks', href: 'trucks', icon: TruckIcon },
+  { name: "Trucks", href: "trucks", icon: TruckIcon, prefetchUrl: "/trucks" },
   {
-    name: 'Rates',
-    href: 'rates',
+    name: "Rates",
+    href: "rates",
     icon: DollarSignIcon,
+    prefetchUrl: "/rates",
   },
   {
-    name: 'Calendar Rates',
-    href: 'calendar-rates',
+    name: "Calendar Rates",
+    href: "calendar-rates",
     icon: CalendarCogIcon,
+    prefetchUrl: "/calendar_rates",
   },
 ];
 
 export default function SettingsPage() {
   const { pathname } = useLocation();
-  const pageUrl = '/crm/settings';
-  const lastPathSegment = pathname.split('/').filter(Boolean).pop();
+  const pageUrl = "/crm/settings";
+  const isSettingsPage = pathname === pageUrl;
 
   return (
-    <div className="grid lg:rounded-tl-2xl lg:grid-cols-[16rem_1fr] h-full overflow-hidden bg-muted">
+    <div className="grid h-full overflow-hidden bg-muted lg:grid-cols-[16rem_1fr] lg:rounded-tl-2xl">
       <PageContainer
-        className={cn('pb-28 p-4 hidden lg:block border-r', {
-          block: pathname === pageUrl,
+        className={cn("hidden border-r p-4 pb-28 lg:block", {
+          block: isSettingsPage,
         })}
       >
         <div className="flex w-full flex-col gap-2">
           {navLinks.map((item, i) => {
-            const isCurrentPage = item.href === lastPathSegment;
             return (
-              <Link
+              <NavLink
                 key={i}
                 to={item.href}
-                className={cn(
-                  buttonVariants({
-                    variant: isCurrentPage ? 'secondary' : 'ghost',
-                    size: 'lg',
-                    className: 'justify-start w-full',
-                  })
-                )}
+                className={({ isActive }) =>
+                  cn(
+                    buttonVariants({
+                      variant: isActive ? "secondary" : "ghost",
+                      size: "lg",
+                      className: "w-full justify-start",
+                    }),
+                  )
+                }
+                viewTransition
               >
-                <item.icon className="size-5" />
-                <span>{item.name}</span>
-              </Link>
+                <item.icon />
+                {item.name}
+              </NavLink>
             );
           })}
         </div>
       </PageContainer>
-      {pageUrl !== pathname ? (
+      {!isSettingsPage ? (
         <Outlet />
       ) : (
-        <div className="hidden lg:flex justify-center items-center w-full h-full" />
+        <div className="hidden h-full w-full items-center justify-center lg:flex" />
       )}
     </div>
   );

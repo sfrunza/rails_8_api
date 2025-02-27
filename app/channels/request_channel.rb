@@ -1,19 +1,10 @@
 class RequestChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "request_#{params[:request_id]}"
+    # stream_from "request_#{params[:request_id]}"
+    stream_for Request.find(params[:request_id])
   end
 
   def unsubscribed
-    stop_all_streams
-  end
-
-  def received(data, options)
-    request = Request.find(data["request_id"])
-    updated_fields = request.updated_fields
-
-    ActionCable.server.broadcast(
-      "request_#{data["request_id"]}",
-      updated_fields
-    )
+    # stop_stream_for "request_#{params[:request_id]}"
   end
 end

@@ -1,5 +1,5 @@
 class RateSerializer
-  include FastJsonapi::ObjectSerializer
+  include JSONAPI::Serializer
 
   attributes :id,
              :extra_mover_rate,

@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { useResource } from "@/hooks/use-resource";
 import useCalendarRates from "@/hooks/use-calendar-rates";
 import { hexToRgb } from "@/lib/helpers";
-import { TCalendarRate } from "@/types/rates";
+import { TCalendarRate } from "@/types/rate";
 
 import { CalendarWithRates } from "@/components/calendar-with-rates";
 import { Label } from "@/components/ui/label";
@@ -54,14 +54,15 @@ export default function CalendarRatesList() {
       <div className="grid justify-items-center gap-y-6 lg:grid-cols-2">
         {months.map((monthDate, i) => {
           return (
-            <CalendarWithRates
-              key={i}
-              onSelectDate={handleSelectDate}
-              mode="single"
-              today={monthDate}
-              disableNavigation
-              showFooter={false}
-            />
+            <div className="rounded-xl border shadow" key={i}>
+              <CalendarWithRates
+                onSelectDate={handleSelectDate}
+                mode="single"
+                today={monthDate}
+                disableNavigation
+                showFooter={false}
+              />
+            </div>
           );
         })}
       </div>
@@ -105,7 +106,7 @@ function SelectRateDialog({
           <DialogTitle>
             {selectedDate && format(selectedDate, "PPP")}
           </DialogTitle>
-          <DialogDescription></DialogDescription>
+          <DialogDescription className="hidden"></DialogDescription>
         </DialogHeader>
         <RadioGroup
           defaultValue={is_blocked ? "0" : selectedRateId.toString()}

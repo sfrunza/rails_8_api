@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -11,7 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import LoadingButton from "@/components/loading-button";
+import { LoadingButton } from "@/components/loading-button";
 import { useResource } from "@/hooks/use-resource";
 
 const FormDataSchema = z.object({
@@ -27,7 +26,7 @@ export default function TruckForm() {
 
   const form = useForm<Inputs>({
     resolver: zodResolver(FormDataSchema),
-    reValidateMode: "onSubmit",
+    reValidateMode: "onChange",
     defaultValues: {
       name: "",
     },
@@ -40,7 +39,7 @@ export default function TruckForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-2">
         <FormField
           control={form.control}
           name="name"
@@ -53,12 +52,8 @@ export default function TruckForm() {
             </FormItem>
           )}
         />
-
         <LoadingButton disabled={isCreating} loading={isCreating}>
-          <span className="flex items-center space-x-2">
-            <PlusIcon className="flex size-5" />
-            <span className="hidden lg:block">Add Truck</span>
-          </span>
+          Add truck
         </LoadingButton>
       </form>
     </Form>

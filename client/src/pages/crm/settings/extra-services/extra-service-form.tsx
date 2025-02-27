@@ -2,11 +2,12 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import LoadingButton from "@/components/loading-button";
+import { LoadingButton } from "@/components/loading-button";
 import PriceInput from "@/components/price-input";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -57,63 +58,61 @@ export default function ExtraServiceForm() {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogTrigger asChild className="absolute right-4 top-4">
+      <DialogTrigger asChild className="absolute right-6 top-6">
         <Button>Add service</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-sm">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Add extra service</DialogTitle>
-          <DialogDescription></DialogDescription>
+          <DialogDescription className="hidden"></DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Service name" {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Price</FormLabel>
-                  <FormControl>
-                    <PriceInput
-                      name="price"
-                      value={field.value}
-                      onValueChange={(val) => {
-                        form.setValue("price", val);
-                      }}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <DialogFooter className="flex-row justify-center gap-2 pt-6">
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full sm:w-auto"
-                onClick={() => setIsOpen(false)}
-              >
-                Cancel
-              </Button>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="p-4 sm:p-6">
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Service name" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price</FormLabel>
+                    <FormControl>
+                      <PriceInput
+                        name="price"
+                        value={field.value}
+                        onValueChange={(val) => {
+                          form.setValue("price", val);
+                        }}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+            <DialogFooter>
               <LoadingButton
                 type="submit"
                 loading={isCreating}
                 disabled={isCreating}
-                className="w-full sm:w-auto"
               >
                 Add service
               </LoadingButton>
+              <DialogClose asChild>
+                <Button type="button" variant="outline">
+                  Cancel
+                </Button>
+              </DialogClose>
             </DialogFooter>
           </form>
         </Form>

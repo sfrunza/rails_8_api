@@ -1,14 +1,14 @@
-import SettingPageWrapper from '@/components/setting-page-wrapper';
+import SettingPageWrapper from "@/components/setting-page-wrapper";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import ServiceForm from './service-form';
-import ServiceList from './service-list';
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import ServiceForm from "./service-form";
+import ServiceList from "./service-list";
 
 export default function ServicesPage() {
   return (

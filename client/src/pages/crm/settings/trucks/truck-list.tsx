@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import LoadingButton from "@/components/loading-button";
-import { TTruck } from "@/types/trucks";
+import { LoadingButton } from "@/components/loading-button";
+import { TTruck } from "@/types/truck";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useResource } from "@/hooks/use-resource";
 

@@ -9,7 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { TExtraService } from "@/types/extra-service";
 import PriceInput from "@/components/price-input";
-import LoadingButton from "@/components/loading-button";
+import { LoadingButton } from "@/components/loading-button";
 import { useResource } from "@/hooks/use-resource";
 
 export default function ExtraServiceItem({
